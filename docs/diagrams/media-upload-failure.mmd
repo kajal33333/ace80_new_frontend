@@ -1,0 +1,15 @@
+sequenceDiagram
+    actor User
+    participant Input as ChatInput
+    participant API as REST
+
+    User->>Input: Attach files + Send
+    Input->>API: uploadChatMedia(files, type)
+    alt Upload fails
+      API-->>Input: error
+      Input->>Input: showError("Failed to upload files")
+      Input->>Input: setSendingMessage=false (abort)
+    else Upload ok
+      API-->>Input: { data: [media] }
+      Input->>Input: emit message:send for each media
+    end

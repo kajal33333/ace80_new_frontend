@@ -1,0 +1,16 @@
+stateDiagram-v2
+    [*] --> Init
+    Init --> LoadingConversation: mount
+    LoadingConversation --> ConversationLoaded: REST success
+    LoadingConversation --> NoConversation: REST found none (Farmer)
+
+    ConversationLoaded --> JoinRoomPending: isConnected && has conversation
+    JoinRoomPending --> InRoom: emit join + mark-all-read
+    InRoom --> LoadingHistory: scrollTop==0 & hasMore
+    LoadingHistory --> InRoom: history appended, auto-scroll re-enabled
+
+    InRoom --> JoinRoomPending: conversationId changes (leave previous room then join new)
+    InRoom --> LeavingRoom: unmount
+    LeavingRoom --> [*]
+
+    ConversationLoaded --> [*]: unmount (ensures leave room)

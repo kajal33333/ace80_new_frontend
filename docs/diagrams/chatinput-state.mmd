@@ -1,0 +1,23 @@
+stateDiagram-v2
+    [*] --> Idle
+    Disconnected: isConnected = false
+
+    Idle --> TypingActive: onChange(message.trim() != "")
+    TypingActive --> Idle: message cleared
+    TypingActive --> Idle: 2s inactivity / emit typing:stop
+
+    Idle --> UploadingMedia: send with files > 0
+    UploadingMedia --> SendingPending: uploadChatMedia success
+    UploadingMedia --> SendFailed: uploadChatMedia error
+
+    Idle --> SendingPending: send text only
+    TypingActive --> SendingPending: press Send
+
+    SendingPending --> SentSuccess: socket ack ok
+    SendingPending --> SendFailed: socket ack error
+
+    SentSuccess --> Idle: clear input, reset typing
+    SendFailed --> Idle: showError, can retry
+
+    Idle --> Disconnected: socket disconnect
+    Disconnected --> Idle: socket reconnect

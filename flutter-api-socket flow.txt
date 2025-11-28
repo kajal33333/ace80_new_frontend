@@ -1,0 +1,630 @@
+Perfect! Let me create **ONLY the Farmer's flow** (Flutter mobile app side). Clean and focused.
+
+***
+
+# 👨‍🌾 Farmer Chat Flow (Flutter Mobile App Only)
+
+---
+
+## 🔐 FLOW 1: Farmer Opens Support
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  STEP 1: FARMER OPENS SUPPORT IN FLUTTER APP                │
+└─────────────────────────────────────────────────────────────┘
+
+Farmer Opens App → Taps "Contact Support" 📞
+    │
+    │ Navigate to ChatScreen()
+    ▼
+┌─────────────────────────────────────────────────────────────┐
+│  ChatScreen initState() Triggers                            │
+└────────────────┬────────────────────────────────────────────┘
+                 │
+                 │ Show loading indicator
+                 │
+         ┌───────┼────────┬──────────────────┐
+         │       │        │                  │
+         ▼       ▼        ▼                  ▼
+    [API 1]  [API 2]  [SOCKET]         [API 3]
+
+
+API 1: CREATE/GET CONVERSATION
+───────────────────────────────
+    │
+    │ POST http://localhost:5000/api/v1/chat/conversations
+    │ Headers: { "Authorization": "Bearer YOUR_TOKEN" }
+    ▼
+    Returns: {
+      _id: "conv123",
+      assignedSupportId: { first_name: "Support", last_name: "Agent" },
+      status: "open"
+    }
+    │
+    ▼
+    Store: conversationId = "conv123"
+
+
+API 2: GET CONVERSATIONS LIST (Optional)
+─────────────────────────────────────────
+    │
+    │ GET http://localhost:5000/api/v1/chat/conversations
+    │ Headers: { "Authorization": "Bearer YOUR_TOKEN" }
+    ▼
+    Returns: { data: [{ conversation1, conversation2... }] }
+
+
+SOCKET: CONNECT TO SERVER
+─────────────────────────
+    │
+    │ socket = IO.io('http://localhost:5000', {
+    │   'transports': ['websocket'],
+    │   'auth': {'token': YOUR_TOKEN}
+    │ });
+    │ socket.connect();
+    ▼
+    Server authenticates and sets farmer online
+    │
+    ▼
+    socket.onConnect((data) {
+      print('Connected to server');
+    })
+
+
+API 3: LOAD MESSAGE HISTORY
+────────────────────────────
+    │
+    │ GET http://localhost:5000/api/v1/chat/messages/conv123
+    │ Query: ?page=1&limit=50
+    │ Headers: { "Authorization": "Bearer YOUR_TOKEN" }
+    ▼
+    Returns: {
+      data: [
+        { _id: "msg1", senderId: {...}, content: "Hello", isRead: true },
+        { _id: "msg2", ... }
+      ],
+      pagination: { currentPage: 1, totalPages: 2 }
+    }
+    │
+    ▼
+    setState(() { messages = response['data']; })
+
+
+AFTER ALL COMPLETE:
+───────────────────
+    │
+    │ Join conversation room
+    │ socket.emit('conversation:join', {'conversationId': 'conv123'});
+    ▼
+    Server adds you to room "conv123"
+    │
+    │ Mark all messages as read
+    │ socket.emit('conversation:mark-all-read', {'conversationId': 'conv123'});
+    ▼
+    Server marks all messages as read
+    │
+    │ Setup event listeners
+    ▼
+    socket.on('message:new', handleNewMessage);
+    socket.on('typing:user-typing', handleTyping);
+    socket.on('typing:user-stopped', handleStopTyping);
+    socket.on('user:online', handleUserOnline);
+    socket.on('user:offline', handleUserOffline);
+    socket.on('notification:new-message', handleNotification);
+
+
+┌─────────────────────────────────────────────────────────────┐
+│  CHAT SCREEN DISPLAYS:                                      │
+│  ┌──────────────────────────────────────────────────────┐  │
+│  │  ← Back    Support Agent          [🔴 Offline]      │  │
+│  │            Last seen 2 hours ago                     │  │
+│  ├──────────────────────────────────────────────────────┤  │
+│  │                                                      │  │
+│  │  [Support] Hello! How can I help you?               │  │
+│  │            08:00 AM                             ✓✓  │  │
+│  │                                                      │  │
+│  │  [Me] I need help with my wheat crop               │  │
+│  │       09:15 AM                                  ✓✓  │  │
+│  │                                                      │  │
+│  │  [Support] Sure! Send me a photo.                   │  │
+│  │            09:20 AM                             ✓✓  │  │
+│  │                                                      │  │
+│  ├──────────────────────────────────────────────────────┤  │
+│  │  Type your message...              [📎]   [Send 📤]  │  │
+│  └──────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────┘
+```
+
+***
+
+## 📨 FLOW 2: Farmer Sends Text Message
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  STEP 2: FARMER TYPES AND SENDS MESSAGE                     │
+└─────────────────────────────────────────────────────────────┘
+
+Farmer Types in TextField
+    │
+    │ onChanged: (text) { ... }
+    ▼
+    socket.emit('typing:start', {
+      'conversationId': 'conv123'
+    });
+    │
+    ▼
+    Support sees: "Rajesh Kumar is typing..." 💬
+    │
+    │ After 2 seconds of no typing
+    ▼
+    socket.emit('typing:stop', {
+      'conversationId': 'conv123'
+    });
+
+
+Farmer Taps Send Button 📤
+    │
+    │ Validate: text.trim().isNotEmpty
+    ▼
+    Disable send button
+    Show loading on button
+    │
+    │ socket.emit('message:send', {
+    │   'conversationId': 'conv123',
+    │   'messageType': 'text',
+    │   'content': 'I need help with my wheat crop'
+    │ });
+    ▼
+    Clear input field immediately
+    messageController.clear();
+    │
+    │ Wait for server confirmation...
+    ▼
+┌─────────────────────────────────────────────────────────────┐
+│  SERVER PROCESSES:                                          │
+│  1. Validates message                                       │
+│  2. Saves to database → message._id = "msg789"              │
+│  3. Updates conversation lastMessage                        │
+│  4. Broadcasts to room                                      │
+└────────────────┬────────────────────────────────────────────┘
+                 │
+                 │ Server broadcasts: 'message:new'
+                 ▼
+    socket.on('message:new', (data) {
+      final message = Message.fromJson(data['message']);
+      setState(() {
+        messages.add(message);
+      });
+      scrollController.jumpTo(
+        scrollController.position.maxScrollExtent
+      );
+    });
+    │
+    │ Re-enable send button
+    ▼
+┌─────────────────────────────────────────────────────────────┐
+│  SCREEN UPDATES:                                            │
+│  ┌──────────────────────────────────────────────────────┐  │
+│  │                                                      │  │
+│  │  [Me] I need help with my wheat crop               │  │
+│  │       11:00 AM                                   ✓  │  │
+│  └──────────────────────────────────────────────────────┘  │
+│                                                             │
+│  Message shows with checkmark (sent ✓)                     │
+└─────────────────────────────────────────────────────────────┘
+```
+
+***
+
+## 📸 FLOW 3: Farmer Sends Image
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  STEP 3: FARMER SENDS CROP PHOTO                            │
+└─────────────────────────────────────────────────────────────┘
+
+Farmer Taps Attach Button 📎
+    │
+    │ final ImagePicker picker = ImagePicker();
+    │ final XFile? image = await picker.pickImage(
+    │   source: ImageSource.gallery
+    │ );
+    ▼
+    Image selected: wheat_disease.jpg
+    │
+    │ Show loading: "Uploading image... 📤"
+    ▼
+
+
+PHASE 1: UPLOAD IMAGE
+─────────────────────
+    │
+    │ var request = http.MultipartRequest(
+    │   'POST',
+    │   Uri.parse('http://localhost:5000/api/v1/chat/media')
+    │ );
+    │ request.headers['Authorization'] = 'Bearer $token';
+    │ request.fields['type'] = 'image';
+    │ request.files.add(
+    │   await http.MultipartFile.fromPath('media', image.path)
+    │ );
+    │ var response = await request.send();
+    ▼
+    Server saves file and returns:
+    {
+      data: [{
+        _id: "media789",
+        url: "http://localhost:5000/uploads/chat/wheat_disease-1234.jpg",
+        name: "wheat_disease.jpg"
+      }]
+    }
+    │
+    │ Hide loading
+    │ Get mediaId = "media789"
+    ▼
+
+
+PHASE 2: SEND MESSAGE WITH MEDIA ID
+────────────────────────────────────
+    │
+    │ socket.emit('message:send', {
+    │   'conversationId': 'conv123',
+    │   'messageType': 'image',
+    │   'mediaId': 'media789'
+    │ });
+    ▼
+    Server creates message with media reference
+    Server broadcasts: 'message:new' with full media URL
+    │
+    ▼
+    socket.on('message:new', (data) {
+      final message = Message.fromJson(data['message']);
+      setState(() {
+        messages.add(message);
+      });
+    });
+    │
+    ▼
+┌─────────────────────────────────────────────────────────────┐
+│  SCREEN DISPLAYS IMAGE:                                     │
+│  ┌──────────────────────────────────────────────────────┐  │
+│  │                                                      │  │
+│  │  [Me] 🖼️ wheat_disease.jpg                          │  │
+│  │       ┌─────────────────────┐                       │  │
+│  │       │  [Image shown]      │                       │  │
+│  │       │  Tap to view full   │                       │  │
+│  │       └─────────────────────┘                       │  │
+│  │       11:05 AM                                   ✓  │  │
+│  └──────────────────────────────────────────────────────┘  │
+│                                                             │
+│  Widget: CachedNetworkImage(                               │
+│    imageUrl: message.mediaId.url,                          │
+│    placeholder: CircularProgressIndicator()                │
+│  )                                                          │
+└─────────────────────────────────────────────────────────────┘
+```
+
+***
+
+## 📩 FLOW 4: Farmer Receives Reply
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  STEP 4: SUPPORT REPLIES → FARMER RECEIVES                  │
+└─────────────────────────────────────────────────────────────┘
+
+Support Agent Types and Sends (from Next.js dashboard)
+    │
+    ▼
+Server receives and broadcasts: 'message:new'
+    │
+    ▼
+
+
+IF FARMER IS IN CHAT (screen open):
+────────────────────────────────────
+    │
+    │ socket.on('message:new', (data) {
+    │   final message = Message.fromJson(data['message']);
+    │   setState(() {
+    │     messages.add(message);
+    │     isTyping = false; // Hide typing indicator if showing
+    │   });
+    │   scrollToBottom();
+    │   playNotificationSound();
+    │   
+    │   // Auto mark as read
+    │   socket.emit('conversation:mark-all-read', {
+    │     'conversationId': 'conv123'
+    │   });
+    │ });
+    ▼
+┌─────────────────────────────────────────────────────────────┐
+│  SCREEN UPDATES:                                            │
+│  ┌──────────────────────────────────────────────────────┐  │
+│  │  [Support] I can see the disease.                    │  │
+│  │            Apply fungicide treatment...              │  │
+│  │            11:12 AM                              ✓✓  │  │
+│  └──────────────────────────────────────────────────────┘  │
+│                                                             │
+│  Message appears instantly with sound 🔔                    │
+└─────────────────────────────────────────────────────────────┘
+
+
+IF FARMER IS NOT IN CHAT (background/different screen):
+────────────────────────────────────────────────────────
+    │
+    │ socket.on('notification:new-message', (data) async {
+    │   // Show local notification
+    │   await flutterLocalNotificationsPlugin.show(
+    │     0,
+    │     'Support Agent replied',
+    │     data['message']['content'],
+    │     NotificationDetails(
+    │       android: AndroidNotificationDetails(
+    │         'chat_channel',
+    │         'Chat Notifications',
+    │         importance: Importance.high,
+    │         priority: Priority.high
+    │       )
+    │     ),
+    │     payload: data['conversationId']
+    │   );
+    │ });
+    ▼
+┌─────────────────────────────────────────────────────────────┐
+│  PHONE NOTIFICATION APPEARS:                                │
+│  ┌──────────────────────────────────────────────────────┐  │
+│  │  🔔 Support Agent replied                            │  │
+│  │  I can see the disease. Apply fungicide...           │  │
+│  │  Just now                                     [View] │  │
+│  └──────────────────────────────────────────────────────┘  │
+│                                                             │
+│  Farmer taps notification → Opens chat screen               │
+└─────────────────────────────────────────────────────────────┘
+```
+
+***
+
+## 🔄 FLOW 5: Real-Time Indicators
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  ONGOING: TYPING, ONLINE/OFFLINE, READ RECEIPTS             │
+└─────────────────────────────────────────────────────────────┘
+
+TYPING INDICATOR:
+─────────────────
+Support starts typing
+    ↓
+socket.on('typing:user-typing', (data) {
+  setState(() {
+    isTyping = true;
+    typingUserName = data['userName'];
+  });
+});
+    ↓
+DISPLAY:
+┌────────────────────────────────────────┐
+│  ← Back   Support Agent   [🟢]        │
+│  Support Agent is typing... 💬         │
+│  ●●● (animated dots)                   │
+└────────────────────────────────────────┘
+    ↓
+Support stops typing
+    ↓
+socket.on('typing:user-stopped', (data) {
+  setState(() {
+    isTyping = false;
+  });
+});
+    ↓
+Typing indicator disappears
+
+
+ONLINE STATUS:
+──────────────
+Support comes online
+    ↓
+socket.on('user:online', (data) {
+  if (data['userId'] == supportId) {
+    setState(() {
+      isSupportOnline = true;
+    });
+  }
+});
+    ↓
+DISPLAY:
+┌────────────────────────────────────────┐
+│  ← Back   Support Agent   [🟢 Online]  │
+│           Active now                   │
+└────────────────────────────────────────┘
+
+
+Support goes offline
+    ↓
+socket.on('user:offline', (data) {
+  if (data['userId'] == supportId) {
+    setState(() {
+      isSupportOnline = false;
+      lastSeen = DateTime.parse(data['lastSeen']);
+    });
+  }
+});
+    ↓
+DISPLAY:
+┌────────────────────────────────────────┐
+│  ← Back   Support Agent   [🔴 Offline] │
+│           Last seen 5 mins ago         │
+└────────────────────────────────────────┘
+
+
+READ RECEIPTS:
+──────────────
+Support reads your messages
+    ↓
+socket.on('conversation:all-read', (data) {
+  setState(() {
+    for (var msg in messages) {
+      if (msg.senderId == myUserId) {
+        msg.isRead = true;
+        msg.readAt = DateTime.parse(data['readAt']);
+      }
+    }
+  });
+});
+    ↓
+DISPLAY: Your messages show ✓✓
+┌────────────────────────────────────────┐
+│     I need help with wheat   [Me]      │
+│     11:00 AM                      ✓✓   │
+│                                        │
+│     [🖼️ wheat_disease.jpg]      [Me]   │
+│     11:05 AM                      ✓✓   │
+└────────────────────────────────────────┘
+```
+
+***
+
+## 🚪 FLOW 6: Farmer Closes Chat
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  STEP 6: CLEANUP                                            │
+└─────────────────────────────────────────────────────────────┘
+
+Farmer taps Back button ←
+    │
+    ▼
+@override
+void dispose() {
+  // Leave conversation room
+  socket.emit('conversation:leave', {
+    'conversationId': conversationId
+  });
+  
+  // Clean up
+  messageController.dispose();
+  scrollController.dispose();
+  
+  super.dispose();
+}
+    │
+    ▼
+Server removes you from room "conv123"
+You stop receiving 'message:new' for this conversation
+    │
+    ▼
+Navigate to previous screen
+
+
+Farmer closes app completely
+    │
+    ▼
+Socket disconnects automatically
+    │
+    ▼
+Server updates:
+- User.isOnline = false
+- User.lastSeen = now
+- Broadcasts 'user:offline' to all
+    │
+    ▼
+Support sees: "Rajesh Kumar - Last seen just now"
+```
+
+***
+
+## 📊 COMPLETE FARMER TIMELINE
+
+```
+TIME    FARMER ACTION                  SERVER RESPONSE
+─────   ─────────────────────────     ──────────────────────────────
+11:00   Opens app, taps Support        
+
+11:01   POST /conversations →          Returns conversationId
+        GET /messages →                Returns message history
+        Socket connects →              Authenticates, sets online
+
+11:02   emit('conversation:join') →    Adds to room "conv123"
+        emit('mark-all-read') →        Marks all messages as read
+        Listens for events             Setup complete
+
+11:05   Types message
+        emit('typing:start') →         Broadcasts to support
+
+11:06   Sends: "I need help" →
+        emit('message:send')           Saves to database
+        Clears input                   Broadcasts 'message:new'
+        ← Receives 'message:new'       Message confirmed
+        Shows with ✓
+
+11:10   Selects crop photo
+        POST /media →                  Saves file, returns mediaId
+        Gets mediaId ←
+        emit('message:send' + id) →    Saves message with media
+        Waits...                       Broadcasts 'message:new'
+        ← Receives 'message:new'       With full media URL
+        Shows image ✓
+
+11:15   ← Receives 'message:new'       Support replied
+        Shows message 💬
+        Plays sound 🔔
+        Auto mark as read →            Updates database
+        emit('mark-all-read')
+
+11:20   Taps back ←
+        emit('conversation:leave')     Removes from room
+        dispose()
+
+11:25   Closes app
+        Socket disconnects             Sets offline, broadcasts
+```
+
+***
+
+## ✅ FLUTTER IMPLEMENTATION CHECKLIST
+
+### Required Packages:
+```yaml
+dependencies:
+  socket_io_client: ^2.0.3+1
+  http: ^1.1.0
+  image_picker: ^1.0.4
+  flutter_local_notifications: ^16.1.0
+  cached_network_image: ^3.3.0
+  shared_preferences: ^2.2.2
+```
+
+### HTTP APIs (4):
+```dart
+✅ POST /chat/conversations          - Create/get conversation
+✅ GET /chat/conversations            - List conversations
+✅ GET /chat/messages/:conversationId - Load message history
+✅ POST /chat/media                   - Upload images/videos/audio
+```
+
+### Socket Events to EMIT (6):
+```dart
+✅ socket.emit('conversation:join', {...})
+✅ socket.emit('conversation:leave', {...})
+✅ socket.emit('conversation:mark-all-read', {...})
+✅ socket.emit('message:send', {...})
+✅ socket.emit('typing:start', {...})
+✅ socket.emit('typing:stop', {...})
+```
+
+### Socket Events to LISTEN (7):
+```dart
+✅ socket.on('message:new', ...)              - Receive new message
+✅ socket.on('notification:new-message', ...) - Background notification
+✅ socket.on('typing:user-typing', ...)       - Show typing indicator
+✅ socket.on('typing:user-stopped', ...)      - Hide typing indicator
+✅ socket.on('conversation:all-read', ...)    - All messages read
+✅ socket.on('user:online', ...)              - Support online
+✅ socket.on('user:offline', ...)             - Support offline
+```
+
+***
+
+This is the **complete Farmer flow** for Flutter! Clean, focused, and ready to implement. 🚀👨‍🌾

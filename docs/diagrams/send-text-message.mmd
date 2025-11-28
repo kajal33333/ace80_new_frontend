@@ -1,0 +1,18 @@
+sequenceDiagram
+    actor User
+    participant Input as ChatInput
+    participant Sock as Socket
+    participant S as Server
+    participant Events as useChatEvents
+    participant Page as Chat Window
+
+    User->>Input: Type message
+    Input->>Sock: typing:start { conversationId }
+    User->>Input: Press Send
+    Input->>Sock: message:send { type: 'text', content, tempId }
+    Sock-->>S: emit
+    S-->>Sock: ack { ok: true } or { error }
+    S-->>Sock: message:new { conversationId, message }
+    Sock-->>Events: message:new
+    Events->>Page: onNewMessage(data)
+    Page->>Page: Append message, scroll if needed

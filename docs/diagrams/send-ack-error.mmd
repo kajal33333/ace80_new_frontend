@@ -1,0 +1,19 @@
+sequenceDiagram
+    actor User
+    participant Input as ChatInput
+    participant Sock as Socket
+    participant S as Server
+    participant Page as Chat Window
+
+    User->>Input: Press Send
+    Input->>Sock: message:send { text, tempId } with ack
+    Sock-->>S: emit
+    alt Server rejects
+      S-->>Sock: ack { error: "Validation failed" }
+      Sock-->>Input: ack error callback
+      Input->>Input: showError, setSendingMessage=false
+      Note over Page: No optimistic append; waits for message:new
+    else Server accepts
+      S-->>Sock: ack { ok: true, messageId }
+      S-->>Sock: message:new { conversationId, message }
+    end

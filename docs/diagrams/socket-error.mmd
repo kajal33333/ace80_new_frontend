@@ -1,0 +1,16 @@
+sequenceDiagram
+    participant Ctx as SocketContext
+    participant UI as Any Chat Screen
+
+    Ctx-->>Ctx: connect_error(err)
+    alt Authentication error
+      Ctx->>UI: showError("Authentication failed")
+      Ctx-->>UI: redirect to /login
+    else Network error
+      Ctx-->>Ctx: set isConnected=false, connectionError
+      UI-->>UI: disable send, show disconnected banner
+      Ctx-->>Ctx: retry with backoff
+      alt reconnect_failed
+        Ctx->>UI: showError("Connection lost. Please refresh the page.")
+      end
+    end

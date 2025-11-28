@@ -1,0 +1,18 @@
+sequenceDiagram
+    actor User
+    participant Page as ChatWindow/UserChatWindow
+    participant API as REST (chatApi.js)
+    participant Sock as Socket (SocketContext)
+    participant S as Server
+
+    User->>Page: Navigate to chat page
+    Page->>API: getConversationById()/getConversations()
+    API-->>Page: { data: [conversation] }
+    Page->>API: getMessages(conversationId, page=1)
+    API-->>Page: { data: [messages] }
+    Note over Page: Render messages, header, status
+
+    Page->>Sock: conversation:join { conversationId }
+    Page->>Sock: conversation:mark-all-read { conversationId }
+    Sock-->>S: Join room + mark read
+    S-->>Sock: acks/broadcasts as needed

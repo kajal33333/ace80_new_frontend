@@ -1,0 +1,8 @@
+sequenceDiagram
+    participant Page as Chat Window
+    participant API as REST
+
+    Page->>Page: Scroll reaches top
+    Page->>API: getMessages(conversationId, page++)
+    API-->>Page: { data: [older messages] }
+    Page->>Page: Prepend to list, keep scroll position
