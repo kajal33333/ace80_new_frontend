@@ -661,7 +661,7 @@ const id = searchParams.get("id");
                 {isSubmitting && (
                   <Loader className="animate-spin w-5 h-5 mr-2" />
                 )}
-                {type === "Edit" ? "Update User" : "Add User"}
+                {type === "Edit" ? "Update Report" : "Add Report"}
               </Button>
             </div>
           )}
