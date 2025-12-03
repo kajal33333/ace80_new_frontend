@@ -11,8 +11,8 @@ export function SiteHeader() {
   const routes = [
     { title: "Dashboard", paths: ["/admin/dashboard"] },
     { title: "Users Master", paths: ["/admin/users-list", "/admin/add-user", "/admin/edit-user", "/admin/view-user"] },
-    { title: "Crops Master", paths: ["/admin/crops-list", "/admin/add-crops", "/admin/edit-crops", "/admin/view-crops"] },
-    { title: "Products Master", paths: ["/admin/products-list", "/admin/add-products", "/admin/edit-products", "/admin/view-products"] },
+    { title: "Add Role", paths: ["/admin/crops-list", "/admin/add-crops", "/admin/edit-crops", "/admin/view-crops"] },
+    { title: "Add Customer / Bulk Upload", paths: ["/admin/products-list", "/admin/add-products", "/admin/edit-products", "/admin/view-products"] },
     { title: "Govt Schemes Master", paths: ["/admin/list-schemes", "/admin/add-schemes", "/admin/edit-schemes", "/admin/view-schemes"] },
     { title: "Media Master", paths: ["/admin/media-master"] },
     { title: "Tutorials Master", paths: ["/admin/tutorials-list", "/admin/add-tutorial", "/admin/edit-tutorial", "/admin/view-tutorial"] },

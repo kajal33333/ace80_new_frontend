@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "AgriTech",
-  description: "AgriTech App",
+  title: "Ace80",
+  description: "Ace80 App",
 };
 
 export default function RootLayout({ children }) {

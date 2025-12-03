@@ -93,9 +93,10 @@ const AddUser = ({ type, userId }) => {
 
     // Role (Required)
 
-    if (!formData.role_id?.trim()) {
-      errors.role_id = "Role is required";
-    }
+   if (!formData.role_id) {
+  errors.role_id = "Role is required";
+}
+
 
     // Company (Required)
 
@@ -119,22 +120,16 @@ const AddUser = ({ type, userId }) => {
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    if (name.startsWith("location.")) {
-      const field = name.split(".")[1];
-      setFormData((prev) => ({
-        ...prev,
-        location: { ...prev.location, [field]: value },
-      }));
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
+  const { name, value } = e.target;
 
-    setErrors((prev) => ({ ...prev, [name]: "" }));
-  };
+  setFormData((prev) => ({
+    ...prev,
+    [name]: value,
+  }));
+
+  setErrors((prev) => ({ ...prev, [name]: "" }));
+};
+
 
   const getUser = async (id) => {
     try {
@@ -201,46 +196,50 @@ const AddUser = ({ type, userId }) => {
   };
 
   const handleUpdate = async (e) => {
-    e.preventDefault();
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      showError("Please fix the highlighted errors");
-      return;
+  e.preventDefault();
+  const validationErrors = validate();
+  if (Object.keys(validationErrors).length > 0) {
+    setErrors(validationErrors);
+    showError("Please fix the highlighted errors");
+    return;
+  }
+  setErrors({});
+  setIsSubmitting(true);
+
+  try {
+    // Prepare payload
+    const payload = { ...formData };
+
+    // Convert role_id to number if needed
+    if (payload.role_id) payload.role_id = Number(payload.role_id);
+
+    // Convert isAdmin to boolean
+    payload.isAdmin = !!payload.isAdmin;
+
+    // Send JSON to backend
+    const response = await instance.put(`/users?id=${id}`, payload);
+
+    if (response?.status === 200) {
+      showSuccess(response?.data?.message || "User updated successfully");
+      router.push("/admin/users-list");
     }
-    setErrors({});
-    setIsSubmitting(true);
-    try {
-      const formDataToSend = new FormData();
-      Object.entries(formData).forEach(([key, value]) => {
-        if (key === "image" && typeof value === "string") return;
-        if (typeof value === "object" && !(value instanceof File)) {
-          formDataToSend.append(key, JSON.stringify(value));
-        } else {
-          formDataToSend.append(key, value);
-        }
+  } catch (error) {
+    console.log(error);
+    const backendErrors = error?.response?.data?.error?.errors;
+    if (backendErrors && Array.isArray(backendErrors)) {
+      const newErrors = {};
+      backendErrors.forEach((err) => {
+        newErrors[err.field] = err.message;
       });
-      const response = await instance.put(`/users/${id}`, formDataToSend);
-      if (response?.status === 200) {
-        showSuccess(response?.data?.message || "User updated successfully");
-        router.push("/admin/users-list");
-      }
-    } catch (error) {
-      console.log(error);
-      const backendErrors = error?.response?.data?.error?.errors;
-      if (backendErrors && Array.isArray(backendErrors)) {
-        const newErrors = {};
-        backendErrors.forEach((err) => {
-          newErrors[err.field] = err.message;
-        });
-        setErrors(newErrors);
-      } else {
-        showError(error?.response?.data?.message || "Update failed");
-      }
-    } finally {
-      setIsSubmitting(false);
+      setErrors(newErrors);
+    } else {
+      showError(error?.response?.data?.message || "Update failed");
     }
-  };
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   useEffect(() => {
     if ((type === "Edit" || type === "View") && id) {
@@ -528,8 +527,8 @@ const AddUser = ({ type, userId }) => {
                 className="w-full border border-border rounded px-3 py-2 text-sm bg-background dark:text-gray-200"
               >
                 <option value="">Select Company</option>
-                <option value="ace">Ace</option>
-                <option value="deaer">Deaer</option>
+                <option value="Ace">Ace</option>
+                <option value="Dealer">Dealer</option>
               </select>
               {errors.company_name && (
                 <p className="text-red-500 text-xs mt-1">

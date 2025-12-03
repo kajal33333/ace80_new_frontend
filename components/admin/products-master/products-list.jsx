@@ -20,7 +20,8 @@ const ProductsList = () => {
   const initialLimit = Number(searchParams.get("limit")) || 10;
 
   const instance = axiosInstance();
-  const [products, setProducts] = useState([]);
+  const [customers, setCustomers] = useState([]);
+
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [limit, setLimit] = useState(initialLimit);
@@ -31,38 +32,38 @@ const ProductsList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const FileUrl = process.env.NEXT_PUBLIC_FILEURL;
 
-  const fetchProducts = async () => {
-    try {
-      const query = searchText.trim()
-        ? `/product-master?q=${searchText.trim()}`
-        : `/product-master?page=${currentPage}&limit=${limit}`;
+  const fetchCustomers = async () => {
+  try {
+    const query = searchText.trim()
+      ? `/customer?q=${searchText.trim()}`
+      : `/customer?page=${currentPage}&limit=${limit}`;
 
-      const response = await instance.get(query);
+    const response = await instance.get(query);
 
-      if (response?.status === 200) {
-        const { data, pagination } = response.data;
-        setProducts(data || []);
-        if (!searchText.trim() && pagination) {
-          setCurrentPage(pagination.currentPage);
-          setLimit(pagination.limit);
-          setTotalPages(pagination.totalPages);
-        } else {
-          setTotalPages(1);
-        }
+    if (response?.status === 200) {
+      const { data, pagination } = response.data;
+      setCustomers(data || []);
+      if (!searchText.trim() && pagination) {
+        setCurrentPage(pagination.currentPage);
+        setLimit(pagination.limit);
+        setTotalPages(pagination.totalPages);
+      } else {
+        setTotalPages(1);
       }
-    } catch (error) {
-      console.error("Error fetching products:", error);
     }
-  };
+  } catch (error) {
+    console.error("Error fetching customers:", error);
+  }
+};
 
   useEffect(() => {
-    fetchProducts();
+    fetchCustomers();
   }, [currentPage, limit]);
 
   const handleSearch = () => {
     setCurrentPage(1);
     router.push(`?page=1&limit=${limit}`);
-    fetchProducts();
+   fetchCustomers();
   };
 
   const handleKeyDown = (e) => {
@@ -89,10 +90,10 @@ const ProductsList = () => {
 
   const handleDelete = async () => {
     try {
-      const response = await instance.delete(`/product-master/${selectedProduct.id}`);
+      const response = await instance.delete(`/customer?id=${selectedProduct.id}`);
       if (response?.status === 200) {
         showSuccess(response?.data?.message);
-        fetchProducts();
+      fetchCustomers();
       }
     } catch (error) {
       console.error("Delete error:", error);
@@ -108,7 +109,7 @@ const ProductsList = () => {
         : await instance.put(`/product-master/enable/${selectedProduct._id}`);
       if (response?.status === 200) {
         showSuccess(response?.data?.message);
-        fetchProducts();
+      fetchCustomers();
       }
     } catch (error) {
       console.error("Toggle status error:", error);
@@ -124,68 +125,90 @@ const ProductsList = () => {
   };
 
   const columns = useMemo(
-    () => [
-      { header: "Name", accessorKey: "name" },
-      // {
-      //   header: "Description",
-      //   accessorKey: "description",
-      //   cell: ({ getValue }) => (
-      //     <div className="line-clamp-2">{getValue()}</div>
-      //   ),
-      // },
-      {
-        header: "SKU Code",
-        accessorKey: "skuCode",
-      },
-      {
-        header: "Image",
-        accessorKey: "image",
-        cell: ({ getValue }) => {
-          const imagePath = getValue()?.replace(/\\/g, "/"); // Ensure URL uses forward slashes
-          const imageUrl = `${FileUrl}${imagePath}`;
-      
-          return (
-            <div className="relative w-10 h-10">
-              <Image
-                src={imageUrl}
-                alt="Product Image"
-                fill
-                className="rounded-sm object-cover"
-                sizes="100px"
-              />
-            </div>
-          );
-        },
-      },
-      { header: "Unit", accessorKey: "unit" },
-      { header: "Price", accessorKey: "price", cell: ({ getValue }) => `₹ ${getValue()}` },
-      { header: "Category", accessorKey: "category" },
-      {
-        header: "Status",
-        accessorKey: "isActive",
-        cell: ({ getValue }) => (
-          getValue() ? (
-            <Badge variant="default" className="bg-primary text-primary-foreground">Active</Badge>
-          ) : (
-            <Badge variant="secondary" className="border border-[color:oklch(0.52_0.08_60)] text-[color:oklch(0.3_0.035_40)]">Inactive</Badge>
-          )
-        ),
-      },
-    ],
-    []
-  );
+     () => [
+       { header: "Code", accessorKey: "customer_code" },
+        { header: "Name", accessorKey: "customer_name" },
+       { header: "Phone", accessorKey: "customer_phone" },
+       { header: "Email", accessorKey: "customer_email" },
+        { header: "updated At", accessorKey: "updatedAt" },
+        {header: "created At", accessorKey: "createdAt" },
+        {
+         header: "Region",
+         accessorKey: "regionInfo.name",
+         cell: ({ row }) => row.original.regionInfo?.name || "-",
+       },
+        {
+         header: "State",
+         accessorKey: "stateInfo.name",
+         cell: ({ row }) => row.original.stateInfo?.name || "-",
+       },
+       {
+         header: "City",
+         accessorKey: "cityInfo.name",
+         cell: ({ row }) => row.original.cityInfo?.name || "-",
+       },
+       {
+         header: "Business",
+         accessorKey: "customerBusinessInfo.name",
+         cell: ({ row }) => row.original.customerBusinessInfo?.name || "-",
+       },
+       {
+         header: "Assigned To",
+         accessorKey: "assignedUser",
+         cell: ({ row }) => {
+           const user = row.original.assignedUser;
+           if (!user) return "-";
+           return `${user.first_name} ${user.last_name}`;
+         },
+       },
+       // {
+ 
+       //   header: "User",
+       //   accessorKey: "userId",
+       //   cell: ({ row }) => {
+       //     const user = row.original?.userId;
+       //     if (!user) return "-";
+       //     const name = [user.first_name, user.last_name]
+       //       .filter(Boolean)
+       //       .join(" ");
+       //     const phone = user.phone;
+       //     if (name && phone) return `${name} (${phone})`;
+       //     return name || phone || "-";
+       //   },
+       // },
+       // {
+       //   header: "Amount",
+       //   accessorKey: "totalPrice",
+       //   cell: ({ getValue }) => `₹ ${getValue()}`,
+       // },
+       // {
+       //   header: "Status",
+       //   accessorKey: "status",
+       //   cell: ({ getValue }) => {
+       //     const value = getValue();
+       //     const badgeProps = statusVariants[value] || { variant: "secondary" };
+       //     return (
+       //       <Badge variant={badgeProps.variant} className="text-xs">
+       //         {value}
+       //       </Badge>
+       //     );
+       //   },
+       // },
+     ],
+     []
+   );
 
   const renderActions = (product) => (
     <div className="flex gap-2">
       <Link
-        href={`/admin/view-products?id=${product._id}`}
+        href={`/admin/view-products?id=${product.id}`}
         className="text-blue-600 hover:text-blue-800"
         title="Preview"
       >
         <Eye size={16} />
       </Link>
       <Link
-        href={`/admin/edit-products?id=${product._id}`}
+        href={`/admin/edit-products?id=${product.id}`}
         className="text-yellow-600 hover:text-yellow-800"
         title="Edit"
       >
@@ -199,7 +222,7 @@ const ProductsList = () => {
         {product.isActive ? <LucideToggleRight size={16} /> : <LucideToggleLeft size={16} />}
       </button>
       <button
-          onClick={() => openDeleteModal(product._id)}
+          onClick={() => openDeleteModal(product.id)}
         className="text-red-600 hover:text-red-800 cursor-pointer"
         title="Delete"
       >
@@ -236,7 +259,7 @@ const ProductsList = () => {
               className="gap-2"
             >
               <IconPlus size={16} />
-              <span className="hidden sm:inline">Add Product</span>
+              <span className="hidden sm:inline">Add Customer</span>
             </Button>
           </Link>
         </div>
@@ -244,7 +267,7 @@ const ProductsList = () => {
         {/* Table */}
         <DataTable
           columns={columns}
-          data={products}
+          data={customers}
           renderActions={renderActions}
           currentPage={currentPage}
           limit={limit}

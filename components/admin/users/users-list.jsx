@@ -79,17 +79,20 @@ const UserList = () => {
   };
 
   const deleteUser = async () => {
-    try {
-      const response = await instance.delete(`/users/${deleteId}`);
-      if (response?.status === 200) {
-        showSuccess(response?.data?.message);
-        fetchUsers();
-      }
-    } catch (error) {
-      console.error("Delete error:", error);
+  try {
+    const response = await instance.delete(`/users/delete?id=${deleteId}`);
+
+    if (response?.status === 200) {
+      showSuccess(response?.data?.message || "User deleted");
+      fetchUsers();   // refresh list
     }
-    closeModal();
-  };
+  } catch (error) {
+    console.error("Delete error:", error);
+  }
+
+  closeModal();
+};
+
 
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
@@ -109,6 +112,10 @@ const UserList = () => {
       { header: "Phone", accessorKey: "contact" },
       { header: "admin", accessorKey: "isAdmin" },
       { header: "company", accessorKey: "company_name" },
+
+
+
+
 
       {
         header: "Status",
