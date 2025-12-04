@@ -1,25 +1,14 @@
-// "use client";
-
-// import AddEnquiry from "@/components/admin/enquiry/enquiry-form";
-// import React from "react";
 
 
-// export default function Page() {
-//   return <AddEnquiry  type={"Add"}/>;
-// }
 
-// app/add-enquiry/page.tsx
-
-import AddEnquiry from "@/components/admin/enquiry/enquiry-form";
+import AddEnquiry from '@/components/admin/enquiry/enquiry-form';
+import { Suspense } from 'react';
 
 
 export default function AddEnquiryPage() {
- 
-
   return (
-    <AddEnquiry 
-      type="Add" 
-      
-    />
+    <Suspense fallback={<div>Loading...</div>}>
+      <AddEnquiry type="Add" />
+    </Suspense>
   );
 }
