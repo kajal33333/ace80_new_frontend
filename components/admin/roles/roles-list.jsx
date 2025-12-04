@@ -235,10 +235,10 @@ const CropsList = () => {
           </div>
 
           {/* Add Button */}
-          <Link href="/admin/add-crops">
+          <Link href="/admin/add-role">
             <Button variant="default" size="sm" className="gap-2">
               <IconPlus size={16} />
-              <span className="hidden sm:inline">Add Role</span>
+              <span className="hidden sm:inline">Add</span>
             </Button>
           </Link>
         </div>

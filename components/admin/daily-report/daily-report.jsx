@@ -162,12 +162,12 @@ const DailyReportList = () => {
   const renderActions = (report) => (
     <div className="flex gap-2">
       {permittedActions.View && (
-        <Link href={`/daily-report/view-daily-report?id=${report.id}`} className="text-blue-600 hover:text-blue-800">
+        <Link href={`/admin/view-daily-report?id=${report.id}`} className="text-blue-600 hover:text-blue-800">
           <Eye size={16} />
         </Link>
       )}
       {permittedActions.Edit && (
-        <Link href={`/daily-report/edit-daily-report?id=${report.id}`} className="text-yellow-600 hover:text-yellow-800">
+        <Link href={`/admin/edit-daily-report?id=${report.id}`} className="text-yellow-600 hover:text-yellow-800">
           <Edit size={16} />
         </Link>
       )}
@@ -213,9 +213,9 @@ const DailyReportList = () => {
         </div>
         <div className="flex gap-2">
           {permittedActions.Create && (
-            <Link href="/daily-report/add-report">
+            <Link href="/admin/add-report">
               <Button variant="default" size="sm" className="gap-2">
-                <IconPlus size={16} /> Add Report
+                <IconPlus size={16} /> Add 
               </Button>
             </Link>
           )}

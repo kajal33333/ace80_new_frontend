@@ -92,7 +92,7 @@ export default function RolePermissionPage() {
         <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
           <h2 className="text-xl font-semibold text-gray-800">Role Permissions</h2>
 
-          <Link href="/admin/role">
+          <Link href="/admin/roles">
             <Button variant="default" size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
               Back
             </Button>

@@ -454,7 +454,7 @@ const fetchAllDropdowns = async () => {
                     <Button
                         variant="default"
                         size="sm"
-                        onClick={() => router.push("/enquiry")}
+                        onClick={() => router.push("/admin/daily-report")}
                         className="gap-2"
                     >
                         <ArrowLeft size={16} />
@@ -1175,7 +1175,7 @@ const fetchAllDropdowns = async () => {
                                 {isSubmitting && (
                                     <Loader className="animate-spin w-5 h-5 mr-2" />
                                 )}
-                                {type === "Edit" ? "Update User" : "Add User"}
+                                {type === "Edit" ? "Update " : "Add "}
                             </Button>
                         </div>
                     )}

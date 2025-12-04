@@ -44,85 +44,41 @@
 :root {
   --radius: 0.625rem;
 
-  /* Light mode colors */
-  --background: oklch(0.98 0.02 120);         /* Light green */
-  --foreground: oklch(0.22 0.035 30);           /* Rich soil brown */
+  /* Light mode colors - White / Black */
+  --background: #ffffff;       /* White background */
+  --foreground: #000000;       /* Black text */
 
-  --card: oklch(0.975 0.02 120);               /* Soft green card */
+  --card: #f5f5f5;             /* Light gray card */
   --card-foreground: var(--foreground);
 
-  --popover: oklch(0.965 0.02 120);
+  --popover: #f0f0f0;
   --popover-foreground: var(--foreground);
 
-  --primary: oklch(0.66 0.18 135);            /* Fresh leaf green */
-  --primary-foreground: oklch(0.99 0.01 30);   /* Almost white */
+  --primary: #000000;          /* Black primary */
+  --primary-foreground: #ffffff;
 
-  --secondary: oklch(0.94 0.03 80);           /* Ripe wheat */
-  --secondary-foreground: oklch(0.3 0.035 40);/* Earthy brown */
+  --secondary: #555555;        /* Medium gray secondary */
+  --secondary-foreground: #ffffff;
 
-  --muted: oklch(0.9 0.02 110);               /* Pale greenish */
-  --muted-foreground: oklch(0.45 0.025 80);
+  --muted: #e0e0e0;
+  --muted-foreground: #333333;
 
-  --accent: oklch(0.88 0.035 90);             /* Soil tint */
+  --accent: #888888;
   --accent-foreground: var(--foreground);
 
-  --destructive: oklch(0.59 0.22 28);         /* Red clay */
-  --border: oklch(0.87 0.02 115);
-  --input: oklch(0.87 0.02 115);
-  --ring: oklch(0.65 0.12 130);
+  --destructive: #ff0000;      /* Red for destructive actions */
+  --border: #cccccc;
+  --input: #ffffff;
+  --ring: #000000;
 
-  --chart-1: oklch(0.63 0.16 140);  /* Leaf green */
-  --chart-2: oklch(0.82 0.1 85);    /* Golden wheat */
-  --chart-3: oklch(0.52 0.08 60);   /* Soil */
-  --chart-4: oklch(0.9 0.13 180);   /* Day sky */
-  --chart-5: oklch(0.58 0.1 35);    /* Tree bark */
+  --chart-1: #000000;
+  --chart-2: #555555;
+  --chart-3: #888888;
+  --chart-4: #cccccc;
+  --chart-5: #333333;
 
-  --sidebar: oklch(0.975 0.02 120);
+  --sidebar: #f5f5f5;
   --sidebar-foreground: var(--foreground);
-  --sidebar-primary: var(--primary);
-  --sidebar-primary-foreground: var(--primary-foreground);
-  --sidebar-accent: var(--accent);
-  --sidebar-accent-foreground: var(--foreground);
-  --sidebar-border: var(--border);
-  --sidebar-ring: var(--ring);
-}
-
-.dark {
-  /* Dark mode colors */
-  --background: oklch(0.22 0.025 110);            /* Deep forest */
-  --foreground: oklch(0.96 0.015 120);            /* Pale green */
-
-  --card: oklch(0.28 0.02 110);
-  --card-foreground: var(--foreground);
-
-  --popover: oklch(0.28 0.02 110);
-  --popover-foreground: var(--foreground);
-
-  --primary: oklch(0.7 0.18 140);                 /* Brighter green */
-  --primary-foreground: oklch(0.18 0.02 110);     /* Dark base */
-
-  --secondary: oklch(0.33 0.02 90);               /* Earthy yellow */
-  --secondary-foreground: oklch(0.96 0.02 120);
-
-  --muted: oklch(0.27 0.015 110);                 /* Darker green */
-  --muted-foreground: oklch(0.72 0.02 120);
-
-  --accent: oklch(0.38 0.02 75);                  /* Bark */
-  --accent-foreground: oklch(0.96 0.01 120);
-
-  --destructive: oklch(0.52 0.17 25);             /* Dull red soil */
-  --border: oklch(0.42 0.02 110);
-  --input: oklch(0.42 0.02 110);
-  --ring: oklch(0.62 0.1 130);
-
-  --chart-1: oklch(0.52 0.15 140);   /* Dull green */
-  --chart-2: oklch(0.67 0.1 80);     /* Faded wheat */
-  --chart-3: oklch(0.37 0.1 60);     /* Brown soil */
-  --chart-4: oklch(0.62 0.15 180);   /* Twilight sky */
-  --chart-5: oklch(0.42 0.1 30);     /* Bark dark */
-
-  --sidebar: oklch(0.28 0.02 110);
-  --sidebar-foreground: oklch(0.96 0.015 120);
   --sidebar-primary: var(--primary);
   --sidebar-primary-foreground: var(--primary-foreground);
   --sidebar-accent: var(--accent);
@@ -131,47 +87,81 @@
   --sidebar-ring: var(--ring);
 }
 
-/* Agriculture-themed scrollbar — Light mode */
+.dark {
+  /* Dark mode colors - Black / White */
+  --background: #000000;       /* Black background */
+  --foreground: #ffffff;       /* White text */
+
+  --card: #1a1a1a;             /* Dark gray card */
+  --card-foreground: var(--foreground);
+
+  --popover: #222222;
+  --popover-foreground: var(--foreground);
+
+  --primary: #ffffff;
+  --primary-foreground: #000000;
+
+  --secondary: #888888;
+  --secondary-foreground: #000000;
+
+  --muted: #333333;
+  --muted-foreground: #cccccc;
+
+  --accent: #555555;
+  --accent-foreground: var(--foreground);
+
+  --destructive: #ff5555;
+  --border: #444444;
+  --input: #222222;
+  --ring: #ffffff;
+
+  --chart-1: #ffffff;
+  --chart-2: #888888;
+  --chart-3: #555555;
+  --chart-4: #cccccc;
+  --chart-5: #333333;
+
+  --sidebar: #1a1a1a;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--accent);
+  --sidebar-accent-foreground: var(--accent-foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
+}
+
+/* Monochrome scrollbars */
 ::-webkit-scrollbar {
   width: 14px;
-  background: var(--muted); /* Pale greenish */
+  background: var(--muted);
   border-radius: 7px;
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(
-    135deg,
-    var(--primary) 60%,
-    var(--secondary) 40%
-  ); /* Fresh leaf green and Ripe wheat */
+  background: var(--primary);
   border-radius: 7px;
   border: 2px solid var(--sidebar);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--chart-3); /* Soil tint on hover */
+  background: var(--secondary);
 }
 
-/* Agriculture-themed scrollbar — Firefox */
+/* Firefox */
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--primary) var(--muted);
 }
 
-/* Dark mode overrides */
 .dark ::-webkit-scrollbar {
-  background: var(--muted); /* Darker green */
+  background: var(--muted);
 }
 .dark ::-webkit-scrollbar-thumb {
-  background: linear-gradient(
-    135deg,
-    var(--primary) 60%,
-    var(--secondary) 40%
-  );
+  background: var(--primary);
   border: 2px solid var(--sidebar);
 }
 .dark * {
   scrollbar-color: var(--primary) var(--muted);
 }
-
 
 @layer base {
   * {

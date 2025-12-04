@@ -176,7 +176,7 @@ const [allowedActions, setAllowedActions] = useState([]);
         
   <Link href="/admin/add-competitor">
     <Button variant="default" size="sm" className="gap-2">
-      <IconPlus size={16} /> Add Competitor
+      <IconPlus size={16} /> Add 
     </Button>
   </Link>
 

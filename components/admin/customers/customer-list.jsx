@@ -13,7 +13,7 @@ import { showSuccess } from "@/lib/toastUtils";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 
-const ProductsList = () => {
+const CustomerList = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialPage = Number(searchParams.get("page")) || 1;
@@ -28,7 +28,7 @@ const ProductsList = () => {
   const [searchText, setSearchText] = useState("");
 
   const [modalType, setModalType] = useState(null); // 'delete' | 'toggle'
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const FileUrl = process.env.NEXT_PUBLIC_FILEURL;
 
@@ -71,26 +71,26 @@ const ProductsList = () => {
   };
 
   const openDeleteModal = (id) => {
-    setSelectedProduct({ id });
+    setSelectedCustomer({ id });
     setModalType('delete');
     setIsModalOpen(true);
   };
 
-  const openToggleModal = (product) => {
-    setSelectedProduct(product);
+  const openToggleModal = (customer) => {
+    setSelectedCustomer(customer);
     setModalType('toggle');
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
-    setSelectedProduct(null);
+    setSelectedCustomer(null);
     setModalType(null);
     setIsModalOpen(false);
   };
 
   const handleDelete = async () => {
     try {
-      const response = await instance.delete(`/customer?id=${selectedProduct.id}`);
+      const response = await instance.delete(`/customer?id=${selectedCustomer.id}`);
       if (response?.status === 200) {
         showSuccess(response?.data?.message);
       fetchCustomers();
@@ -102,11 +102,11 @@ const ProductsList = () => {
   };
 
   const handleToggleStatus = async () => {
-    if (!selectedProduct) return;
+    if (!selectedCustomer) return;
     try {
-      const response = selectedProduct.isActive
-        ? await instance.put(`/product-master/disable/${selectedProduct._id}`)
-        : await instance.put(`/product-master/enable/${selectedProduct._id}`);
+      const response = selectedCustomer.isActive
+        ? await instance.put(`/product-master/disable/${selectedCustomer._id}`)
+        : await instance.put(`/product-master/enable/${selectedCustomer._id}`);
       if (response?.status === 200) {
         showSuccess(response?.data?.message);
       fetchCustomers();
@@ -198,31 +198,31 @@ const ProductsList = () => {
      []
    );
 
-  const renderActions = (product) => (
+  const renderActions = (customer) => (
     <div className="flex gap-2">
       <Link
-        href={`/admin/view-products?id=${product.id}`}
+        href={`/admin/view-customer?id=${customer.id}`}
         className="text-blue-600 hover:text-blue-800"
         title="Preview"
       >
         <Eye size={16} />
       </Link>
       <Link
-        href={`/admin/edit-products?id=${product.id}`}
+        href={`/admin/edit-customer?id=${customer.id}`}
         className="text-yellow-600 hover:text-yellow-800"
         title="Edit"
       >
         <Edit size={16} />
       </Link>
       <button
-        onClick={() => openToggleModal(product)}
+        onClick={() => openToggleModal(customer)}
         className="text-green-600 hover:text-green-800 cursor-pointer"
-        title={product.isActive ? "Inactive" : "Active"}
+        title={customer.isActive ? "Inactive" : "Active"}
       >
-        {product.isActive ? <LucideToggleRight size={16} /> : <LucideToggleLeft size={16} />}
+        {customer.isActive ? <LucideToggleRight size={16} /> : <LucideToggleLeft size={16} />}
       </button>
       <button
-          onClick={() => openDeleteModal(product.id)}
+          onClick={() => openDeleteModal(customer.id)}
         className="text-red-600 hover:text-red-800 cursor-pointer"
         title="Delete"
       >
@@ -252,14 +252,14 @@ const ProductsList = () => {
           </div>
 
           {/* Add Button */}
-          <Link href="/admin/add-products">
+          <Link href="/admin/add-customers">
             <Button
               variant="default"
               size="sm"
               className="gap-2"
             >
               <IconPlus size={16} />
-              <span className="hidden sm:inline">Add Customer</span>
+              <span className="hidden sm:inline">Add </span>
             </Button>
           </Link>
         </div>
@@ -298,21 +298,21 @@ const ProductsList = () => {
         }
         title={
           modalType === 'delete' ? 'Confirm Deletion' :
-          modalType === 'toggle' && selectedProduct ? (selectedProduct.isActive ? 'Disable Product' : 'Enable Product') :
+          modalType === 'toggle' && selectedCustomer ? (selectedCustomer.isActive ? 'Disable Customer' : 'Enable Customer') :
           ''
         }
         description={
-          modalType === 'delete' ? 'Are you sure you want to delete this product? This action cannot be undone.' :
-          modalType === 'toggle' && selectedProduct ? (
-            selectedProduct.isActive
-              ? 'Are you sure you want to disable this product? You can enable it again later.'
-              : 'Are you sure you want to enable this product?'
+          modalType === 'delete' ? 'Are you sure you want to delete this customer? This action cannot be undone.' :
+          modalType === 'toggle' && selectedCustomer ? (
+            selectedCustomer.isActive
+              ? 'Are you sure you want to disable this customer? You can enable it again later.'
+              : 'Are you sure you want to enable this customer?'
           ) :
           ''
         }
         confirmButtonText={
           modalType === 'delete' ? 'Delete' :
-          modalType === 'toggle' && selectedProduct ? (selectedProduct.isActive ? 'Disable' : 'Enable') :
+          modalType === 'toggle' && selectedCustomer ? (selectedCustomer.isActive ? 'Disable' : 'Enable') :
           ''
         }
         confirmButtonVariant={modalType === 'delete' ? 'outline' : 'outline'}
@@ -321,4 +321,4 @@ const ProductsList = () => {
   );
 };
 
-export default ProductsList;
+export default CustomerList;

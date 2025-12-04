@@ -283,27 +283,7 @@ const AddUser = ({ type, userId }) => {
 
         <form onSubmit={type === "Edit" ? handleUpdate : handleSubmit}>
           <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
-            {/* Phone */}
-            <div>
-              <label
-                htmlFor="contact"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200"
-              >
-                Contact
-              </label>
-              <input
-                type="tel"
-                name="contact"
-                value={formData.contact}
-                onChange={handleChange}
-                disabled={type === "View"}
-                className="w-full border border-border rounded px-3 py-2 text-sm bg-background dark:text-gray-200"
-                placeholder="e.g., +1234567890"
-              />
-              {errors.contact && (
-                <p className="text-red-500 text-xs mt-1">{errors.contact}</p>
-              )}
-            </div>
+           
 
             {/* First Name */}
             <div>
@@ -370,6 +350,27 @@ const AddUser = ({ type, userId }) => {
                 <p className="text-red-500 text-xs mt-1">
                   {errors.primary_email}
                 </p>
+              )}
+            </div>
+             {/* Phone */}
+            <div>
+              <label
+                htmlFor="contact"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200"
+              >
+                Contact
+              </label>
+              <input
+                type="tel"
+                name="contact"
+                value={formData.contact}
+                onChange={handleChange}
+                disabled={type === "View"}
+                className="w-full border border-border rounded px-3 py-2 text-sm bg-background dark:text-gray-200"
+                placeholder="e.g., +1234567890"
+              />
+              {errors.contact && (
+                <p className="text-red-500 text-xs mt-1">{errors.contact}</p>
               )}
             </div>
             {/* emp code */}
@@ -643,7 +644,7 @@ const AddUser = ({ type, userId }) => {
                 {isSubmitting && (
                   <Loader className="animate-spin w-5 h-5 mr-2" />
                 )}
-                {type === "Edit" ? "Update User" : "Add User"}
+                {type === "Edit" ? "Update " : "Add "}
               </Button>
             </div>
           )}

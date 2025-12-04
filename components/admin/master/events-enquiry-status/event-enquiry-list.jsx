@@ -32,8 +32,8 @@ const EventEnquiryList = () => {
 
   const [deleteId, setDeleteId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-const [allowedActions, setAllowedActions] = useState([]);
-// Filter-related states
+  const [allowedActions, setAllowedActions] = useState([]);
+  // Filter-related states
   const [selectedCity, setSelectedCity] = useState("");
   const [selectedAssignedTo, setSelectedAssignedTo] = useState("");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -50,15 +50,15 @@ const [allowedActions, setAllowedActions] = useState([]);
 
       const response = await instance.get(`/eventsEnquiryStatus?${queryParams.toString()}`);
       if (response?.status === 200) {
-       const { data, pagination } = response.data;
+        const { data, pagination } = response.data;
         setReports(data || []);
         if (pagination) {
           setCurrentPage(pagination.currentPage);
           setLimit(pagination.limit);
           setTotalPages(pagination.totalPages);
-        //    setAllowedActions(allowedActions);
+          //    setAllowedActions(allowedActions);
         }
-        
+
       }
     } catch (error) {
       console.error("Error fetching reports:", error);
@@ -111,20 +111,20 @@ const [allowedActions, setAllowedActions] = useState([]);
 
   const columns = useMemo(
     () => [
-    { header: "Name", accessorKey: "name" },
-   
-    { 
-    header: "Created At",
+      { header: "Name", accessorKey: "name" },
+
+      {
+        header: "Created At",
         accessorKey: "createdAt",
-      
-    },
-       {
+
+      },
+      {
         header: "Updated At",
         accessorKey: "updatedAt",
-       
+
       },
-     
-      
+
+
     ],
     []
   );
@@ -132,24 +132,24 @@ const [allowedActions, setAllowedActions] = useState([]);
 
   const renderActions = (report) => (
     <div className="flex gap-2">
-   
+
       <Link href={`/admin/view-enquiry-status?id=${report.id}`} className="text-blue-600 hover:text-blue-800">
         <Eye size={16} />
       </Link>
 
-     
+
       <Link href={`/admin/edit-enquiry-status?id=${report.id}`} className="text-yellow-600 hover:text-yellow-800">
         <Edit size={16} />
       </Link>
-    
-   
+
+
       <button
         onClick={() => openDeleteModal(report.id)}
         className="text-red-500 hover:text-red-800"
       >
         <Trash size={16} />
       </button>
-    
+
     </div>
   );
 
@@ -173,12 +173,12 @@ const [allowedActions, setAllowedActions] = useState([]);
             </Button>
           </div>
 
-        
-  <Link href="/admin/add-enquiry-status">
-    <Button variant="default" size="sm" className="gap-2">
-      <IconPlus size={16} /> Add Enquiry Status
-    </Button>
-  </Link>
+
+          <Link href="/admin/add-enquiry-status">
+            <Button variant="default" size="sm" className="gap-2">
+              <IconPlus size={16} />  Add
+            </Button>
+          </Link>
 
         </div>
 

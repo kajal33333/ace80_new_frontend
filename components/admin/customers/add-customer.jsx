@@ -11,13 +11,12 @@ import Image from "next/image";
 import {  Download } from "lucide-react";
 
 
-const AddProduct = ({ type }) => {
+const AddCustomer = ({ type }) => {
   const instance = axiosInstance();
   const router = useRouter();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
-  const FileUrl = process.env.NEXT_PUBLIC_FILEURL;
-  const imageRef = useRef(null);
+ 
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -51,7 +50,7 @@ const [uploadResults, setUploadResults] = useState(null);
   const newErrors = {};
   if (!formData.customer_name.trim()) newErrors.customer_name = "Customer Name is required";
   if (!formData.customer_phone.trim()) newErrors.customer_phone = "Phone number is required";
-  if (!formData.assigned_to) newErrors.assigned_to = "Assign to is required"; // ✅ fix
+  if (!formData.assigned_to) newErrors.assigned_to = "Assign to is required"; 
   return newErrors;
 };
 
@@ -66,56 +65,7 @@ const [uploadResults, setUploadResults] = useState(null);
   setErrors((prev) => ({ ...prev, [name]: "" }));
 };
 
-  // const handleImageChange = (e) => {
-  //   const file = e.target.files?.[0];
-  //   const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
-  //   const maxSize = 2 * 1024 * 1024;
-
-  //   if (!file) {
-  //     setFormData((prev) => ({ ...prev, image: null }));
-  //     setErrors((prev) => ({ ...prev, image: "Image is required" }));
-  //     setPreviewUrl(null);
-  //     return;
-  //   }
-
-  //   if (!allowedTypes.includes(file.type)) {
-  //     imageRef.current.value = "";
-  //     setErrors((prev) => ({
-  //       ...prev,
-  //       image: "Only .jpg, .jpeg, .png, or .webp files are allowed",
-  //     }));
-  //     setFormData((prev) => ({ ...prev, image: null }));
-  //     setPreviewUrl(null);
-  //     return;
-  //   }
-
-  //   if (file.size > maxSize) {
-  //     imageRef.current.value = "";
-  //     setErrors((prev) => ({
-  //       ...prev,
-  //       image: "Image size should not exceed 2MB",
-  //     }));
-  //     setFormData((prev) => ({ ...prev, image: null }));
-  //     setPreviewUrl(null);
-  //     return;
-  //   }
-
-  //   const objectUrl = URL.createObjectURL(file);
-  //   setPreviewUrl(objectUrl);
-  //   setFormData((prev) => ({ ...prev, image: file }));
-  //   setErrors((prev) => ({ ...prev, image: "" }));
-  // };
-
-  // const handleImageDelete = () => {
-  //   imageRef.current.value = "";
-  //   setFormData((prev) => ({ ...prev, image: null }));
-  //   setErrors((prev) => ({ ...prev, image: "Image is required" }));
-  //   if (previewUrl) {
-  //     URL.revokeObjectURL(previewUrl);
-  //     setPreviewUrl(null);
-  //   }
-  // };
-
+  
 
    const fetchMasterData = async () => {
     try {
@@ -177,35 +127,6 @@ useEffect(() => {
   }
 }, [id, type]);
 
-
-// const handleSubmit = async (e) => {
-//   e.preventDefault();
-//   const validationErrors = validate(); // Update validation to match new fields
-//   if (Object.keys(validationErrors).length > 0) {
-//     showWarning("Please fill all required fields");
-//     setErrors(validationErrors);
-//     return;
-//   }
-//   setIsSubmitting(true);
-//   try {
-//     const response = await instance.post("/customer-master", formData);
-//     if (response?.status === 200) {
-//       showSuccess(response?.data?.message || "Customer added successfully");
-//       router.push("/admin/customers-list");
-//     }
-//   } catch (error) {
-//     const backendErrors = error?.response?.data?.error?.errors;
-//     if (backendErrors && Array.isArray(backendErrors)) {
-//       const newErrors = {};
-//       backendErrors.forEach((err) => {
-//         newErrors[err.field] = err.message;
-//       });
-//       setErrors(newErrors);
-//     }
-//   } finally {
-//     setIsSubmitting(false);
-//   }
-// }; 
 
 
 
@@ -274,7 +195,7 @@ const handleSubmit = async (e) => {
 
     if (response?.status === 200) {
       showSuccess(response?.data?.message || "Customer added successfully");
-     router.push("/admin/products-list");
+     router.push("/admin/customers");
     }
   } catch (error) {
     const backendErrors = error?.response?.data?.error?.errors;
@@ -308,45 +229,7 @@ const downloadErrorReport = () => {
 };
 
   
-  //   e.preventDefault();
-  //   const validationErrors = validate();
-  //   if (Object.keys(validationErrors).length > 0) {
-  //     setErrors(validationErrors);
-  //     return;
-  //   }
-  //   setErrors({});
-  //   setIsSubmitting(true);
-  //   try {
-  //     const formDataToSend = new FormData();
-  //     // Combine quantity and unit into a single unit field
-  //     const combinedUnit = `${formData.quantity}${formData.unit}`;
-  //     Object.entries(formData).forEach(([key, value]) => {
-  //       if (key === "image" && typeof value === "string") return;
-  //       if (key === "quantity") return; // Skip quantity as it's combined with unit
-  //       if (key === "unit") {
-  //         formDataToSend.append(key, combinedUnit);
-  //       } else {
-  //         formDataToSend.append(key, value);
-  //       }
-  //     });
-  //     const response = await instance.put(`/product-master/${id}`, formDataToSend);
-  //     if (response?.status === 200) {
-  //       showSuccess(response?.data?.message || "Product updated successfully");
-  //       router.push("/admin/products-list");
-  //     }
-  //   } catch (error) {
-  //     const backendErrors = error?.response?.data?.error?.errors;
-  //     if (backendErrors && Array.isArray(backendErrors)) {
-  //       const newErrors = {};
-  //       backendErrors.forEach((err) => {
-  //         newErrors[err.field] = err.message;
-  //       });
-  //       setErrors(newErrors);
-  //     }
-  //   } finally {
-  //     setIsSubmitting(false);
-  //   }
-  // };
+  
 const handleUpdate = async (e) => {
   e.preventDefault();
   const validationErrors = validate();
@@ -371,7 +254,7 @@ const handleUpdate = async (e) => {
     const response = await instance.put("/customer", payload);
 
     showSuccess(response?.data?.message || "Customer updated successfully");
-    router.push("/admin/products-list");
+    router.push("/admin/customers");
   } catch (error) {
     const backendErrors = error?.response?.data?.error?.errors;
     if (backendErrors && Array.isArray(backendErrors)) {
@@ -406,12 +289,12 @@ const handleUpdate = async (e) => {
       <div className="bg-white dark:bg-background border shadow rounded-lg p-6">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-4">
           <h2 className="text-xl font-bold text-gray-900 dark:text-gray-200">
-            {type === "View" ? "View Product" : `${type} Product`}
+            {type === "View" ? "View Customer" : `${type} Customer`}
           </h2>
           <Button
             variant="default"
             size="sm"
-            onClick={() => router.push("/admin/products-list")}
+            onClick={() => router.push("/admin/customers")}
             className="gap-2"
           >
             <ArrowLeft size={16} />
@@ -687,7 +570,7 @@ const handleUpdate = async (e) => {
                 {isSubmitting && (
                   <Loader className="animate-spin w-5 h-5 mr-2" />
                 )}
-                {type === "Edit" ? "Update Customer" : "Add Customer"}
+                {type === "Edit" ? "Update " : "Add "}
               </Button>
             </div>
           )}
@@ -822,4 +705,4 @@ const handleUpdate = async (e) => {
   );
 };
 
-export default AddProduct;
+export default AddCustomer;

@@ -1,13 +1,13 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import { showSuccess, showError } from "@/lib/toastUtils";
+import { showSuccess, showError, showWarning } from "@/lib/toastUtils";
 import { useRouter, useSearchParams } from "next/navigation";
 import axiosInstance from "@/lib/axiosInstance";
 import { Button } from "@/components/ui/button";
 import { Loader, ArrowLeft } from "lucide-react";
 import Image from "next/image";
 
-const AddCrop = ({ type, id }) => {
+const AddRole = ({ type, id }) => {
   const instance = axiosInstance();
   const router = useRouter();
   // const searchParams = useSearchParams();
@@ -53,7 +53,7 @@ const AddCrop = ({ type, id }) => {
 
   
 
-  const getCrop = async (id) => {
+  const getRole = async (id) => {
   try {
     const response = await instance.get(`/roles`);
     
@@ -61,15 +61,15 @@ const AddCrop = ({ type, id }) => {
       const roles = response.data.data;
 
       // Single role extract
-      const crop = roles.find(r => r.role_id == id);
+      const role = roles.find(r => r.role_id == id);
 
-      if (!crop) return showError("Role not found");
+      if (!role) return showError("Role not found");
 
       setFormData({
-        role_name: crop.role_name || "",
-        description: crop.description || "",
-        createdAt: crop.createdAt || "",
-        updatedAt: crop.updatedAt || "",
+        role_name: role.role_name || "",
+        description: role.description || "",
+        createdAt: role.createdAt || "",
+        updatedAt: role.updatedAt || "",
       });
     }
   } catch (error) {
@@ -98,8 +98,8 @@ const AddCrop = ({ type, id }) => {
 
       const response = await instance.post("/roles", formData);
       if (response?.status === 200) {
-        showSuccess(response?.data?.message || "Crop added successfully");
-        router.push("/admin/crops-list");
+        showSuccess(response?.data?.message || "Role added successfully");
+        router.push("/admin/roles");
       }
     } catch (error) {
       const backendErrors = error?.response?.data?.error?.errors;
@@ -137,7 +137,7 @@ const AddCrop = ({ type, id }) => {
 
     if (response?.status === 200) {
       showSuccess("Role updated successfully");
-      router.push("/admin/crops-list");
+      router.push("/admin/roles");
     }
   } catch (error) {
     showError(error?.response?.data?.message || "Update failed");
@@ -149,7 +149,7 @@ const AddCrop = ({ type, id }) => {
 
   useEffect(() => {
     if ((type === "Edit" || type === "View") && id) {
-      getCrop(id);
+      getRole(id);
     }
   }, [id, type]);
 
@@ -166,12 +166,12 @@ const AddCrop = ({ type, id }) => {
       <div className="bg-white dark:bg-background border shadow rounded-lg p-6">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-4">
           <h2 className="text-xl font-bold text-gray-900 dark:text-gray-200">
-            {type === "View" ? "View Crop" : `${type} Crop`}
+            {type === "View" ? "View Role" : `${type} Role`}
           </h2>
           <Button
             variant="default"
             size="sm"
-            onClick={() => router.push("/admin/crops-list")}
+            onClick={() => router.push("/admin/roles")}
             className="gap-2"
           >
             <ArrowLeft size={16} />
@@ -269,7 +269,7 @@ const AddCrop = ({ type, id }) => {
                 {isSubmitting && (
                   <Loader className="animate-spin w-5 h-5 mr-2" />
                 )}
-                {type === "Edit" ? "Update Role" : "Add Role"}
+                {type === "Edit" ? "Update " : "Add "}
               </Button>
             </div>
           )}
@@ -279,4 +279,4 @@ const AddCrop = ({ type, id }) => {
   );
 };
 
-export default AddCrop;
+export default AddRole;

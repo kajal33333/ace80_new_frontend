@@ -199,7 +199,7 @@ const AddCustomerBusinessType = ({ type }) => {
                                 className="gap-2"
                             >
                                 {isSubmitting && <Loader className="animate-spin w-5 h-5 mr-2" />}
-                                {type === "Edit" ? "Update Customer Business Type" : "Add Customer Business Type"}
+                                {type === "Edit" ? "Update" : "Add "}
                             </Button>
                         </div>
                     )}

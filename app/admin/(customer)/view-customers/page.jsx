@@ -1,13 +1,13 @@
 import {React, Suspense} from 'react'
-import AddProduct from '@/components/admin/products-master/add-product'
+import AddProduct from '@/components/admin/customers/add-customer'
 const page = ({ searchParams }) => {
-   const id = searchParams?.id; 
+  const id = searchParams?.id; 
   return (
     <>
       <Suspense fallback={<div className='flex justify-center items-center h-screen'>Loading...</div>}>
-        <AddProduct type="Edit" id={id} />
+        <AddProduct type="View" id={id} />
       </Suspense>
-    </> 
+    </>
   )
 }
 

@@ -179,7 +179,7 @@ const id = searchParams.get("id");
 
       if (response?.status === 200) {
         showSuccess(response?.data?.message || "User updated successfully");
-        router.push("/daily-report");
+        router.push("/admin/daily-report");
       }
     } catch (error) {
       console.log(error);
@@ -244,7 +244,7 @@ const id = searchParams.get("id");
       <Button
         size="sm"
         variant="default"
-        onClick={() => router.push(`/add-enquiry?daily_report_id=${id}`)}
+        onClick={() => router.push(`/admin/add-enquiry?daily_report_id=${id}`)}
         className="gap-2"
       >
         <Plus size={14} />
@@ -254,7 +254,7 @@ const id = searchParams.get("id");
           <Button
             variant="default"
             size="sm"
-            onClick={() => router.push("/daily-report")}
+            onClick={() => router.push("/admin/daily-report")}
             className="gap-2"
           >
             <ArrowLeft size={16} />
@@ -271,7 +271,7 @@ const id = searchParams.get("id");
                 htmlFor="mobile_no"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200"
               >
-                Contact
+                Contact *
               </label>
               <input
                 type="text"
@@ -293,7 +293,7 @@ const id = searchParams.get("id");
                 htmlFor="contact_person"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200"
               >
-                Contact person
+                Contact person *
               </label>
               <input
                 type="text"
@@ -481,7 +481,7 @@ const id = searchParams.get("id");
                 htmlFor="time_of_visit"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200"
               >
-                Time of Visit
+                Time of Visit *
               </label>
 
               <input
@@ -528,7 +528,7 @@ const id = searchParams.get("id");
                 htmlFor="assigned_to"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200"
               >
-                Assigned user
+                Assigned user *
               </label>
               <select
                 id="assigned_to"
@@ -559,7 +559,7 @@ const id = searchParams.get("id");
                 htmlFor="location_area"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200"
               >
-                location
+                location *
               </label>
               <input
                 type="text"
@@ -580,7 +580,7 @@ const id = searchParams.get("id");
                 htmlFor="city"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200"
               >
-                City
+                City *
               </label>
               <select
                 id="city"
@@ -661,7 +661,7 @@ const id = searchParams.get("id");
                 {isSubmitting && (
                   <Loader className="animate-spin w-5 h-5 mr-2" />
                 )}
-                {type === "Edit" ? "Update Report" : "Add Report"}
+                {type === "Edit" ? "Update " : "Add "}
               </Button>
             </div>
           )}

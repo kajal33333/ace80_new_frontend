@@ -11,13 +11,27 @@ export function SiteHeader() {
   const routes = [
     { title: "Dashboard", paths: ["/admin/dashboard"] },
     { title: "Users Master", paths: ["/admin/users-list", "/admin/add-user", "/admin/edit-user", "/admin/view-user"] },
-    { title: "Add Role", paths: ["/admin/crops-list", "/admin/add-crops", "/admin/edit-crops", "/admin/view-crops"] },
-    { title: "Add Customer / Bulk Upload", paths: ["/admin/products-list", "/admin/add-products", "/admin/edit-products", "/admin/view-products"] },
-    { title: "Govt Schemes Master", paths: ["/admin/list-schemes", "/admin/add-schemes", "/admin/edit-schemes", "/admin/view-schemes"] },
-    { title: "Media Master", paths: ["/admin/media-master"] },
-    { title: "Tutorials Master", paths: ["/admin/tutorials-list", "/admin/add-tutorial", "/admin/edit-tutorial", "/admin/view-tutorial"] },
-    { title: "Crops Sale Requests", paths: ["/admin/sale-requests", "/admin/edit-sale-request"] },
-    { title: "Product Order Requests", paths: ["/admin/order-requests", "/admin/edit-product-order"] },
+    { title: " Roles", paths: ["/admin/roles", "/admin/add-role", "/admin/edit-role", "/admin/view-role"] },
+    { title: " Customers / Bulk Upload", paths: ["/admin/customers", "/admin/add-customer", "/admin/edit-customer", "/admin/view-customer"] },
+    { title: "Daily Reports", paths: ["/admin/daily-report", "/admin/add-report", "/admin/edit-daily-report", "/admin/view-daily-report"] },
+    { title: "Enquiry", paths: ["/admin/enquiry", "/admin/add-enquiry","/admin/edit-enquiry","/admin/view-enquiry"] },
+    { title: "Division", paths: ["/admin/division", "/admin/add-division", "/admin/edit-division", "/admin/view-division"] },
+    { title: "States", paths: ["/admin/state", "/admin/add-state","/admin/edit-state","/admin/view-state"] },
+    { title: "Models", paths: ["/admin/models", "/admin/edit-model", "/admin/add-model", "/admin/view-model"] },
+    { title: "Region", paths: ["/admin/region", "/admin/edit-region", "/admin/add-region", "/admin/view-region"] },
+     {title:"Event Enquiry Status", paths:["/admin/enquiry-status","/admin/add-enquiry-status","/admin/edit-enquiry-status","/admin/view-enquiry-status"]},
+     { title: "Customer Business Type", paths: ["/admin/customer-business-type", "/admin/edit-type", "/admin/add-type", "/admin/view-type"] },
+    { title: "Category", paths: ["/admin/category", "/admin/edit-category", "/admin/add-category", "/admin/view-category"] },
+    { title: "Customer Business", paths: ["/admin/customer-business", "/admin/edit-customerBusiness", "/admin/add-customerBusiness", "/admin/view-customerBusiness"] },
+   {title:"Order Probability", paths:["/admin/order-probability","/admin/add-order-probability","/admin/edit-order-probability","/admin/view-order-probability"]},
+   {title:"Competitior", paths:["/admin/competitor-name","/admin/add-competitor","/admin/edit-competitor","/admin/view-competitor"]},
+    {title:"Leave/OD Type", paths:["/admin/leave-type","/admin/add-leaveOd-type","/admin/edit-leaveOd-type","/admin/view-leaveOd-type"]},
+    {title:"Leave/OD Status", paths:["/admin/leave-status","/admin/add-status","/admin/edit-status","/admin/view-status"]},
+    {title:"ToDo Priority", paths:['/admin/todo-priority','/admin/add-todopriority','/admin/edit-todopriority','/admin/view-todopriority']},
+    {title:'ToDo Status', paths:['/admin/todo-status','/admin/add-todostatus','/admin/edit-todostatus','/admin/view-todostatus']},
+   
+    {title:"Event Probability", paths:['/admin/event-probability','/admin/add-event-probability','/admin/edit-event-probability','/admin/view-event-probability']},
+    
   ];
   
   const getTitle = () =>

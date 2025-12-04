@@ -8,7 +8,7 @@ export default function AuthLayout({ children }) {
       <div className="bg-muted relative hidden lg:block">
         <Image
           src="/agritech.webp"
-          alt="AgriTech"
+          alt="Ace 80"
           fill
           className="absolute inset-0 h-full w-full object-cover"
           priority
@@ -22,7 +22,7 @@ export default function AuthLayout({ children }) {
                 <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
                   <LucideVegan className="size-4" />
                 </div>
-                AgriTech
+                Ace 80
               </Link>
             </div>
             {children}

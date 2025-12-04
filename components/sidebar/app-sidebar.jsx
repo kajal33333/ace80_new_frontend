@@ -46,8 +46,8 @@ export function AppSidebar({ ...props }) {
   const baseNavItems = [
     { title: "Dashboard", url: "/admin/dashboard", icon: LucideLayoutDashboard },
     { title: "Users", url: "/admin/users-list", icon: LucideUser },
-    { title: "Roles", url: "/admin/crops-list", icon: Leaf },
-    { title: "Customers", url: "/admin/products-list", icon: Package },
+    { title: "Roles", url: "/admin/roles", icon: Leaf },
+    { title: "Customers", url: "/admin/customers", icon: Package },
 
     // COLLAPSIBLE ENQUIRY DATA
     {

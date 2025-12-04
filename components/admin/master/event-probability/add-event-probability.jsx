@@ -200,7 +200,7 @@ const AddEventProbability = ({ type }) => {
                                 className="gap-2"
                             >
                                 {isSubmitting && <Loader className="animate-spin w-5 h-5 mr-2" />}
-                                {type === "Edit" ? "Update Event probability" : "Add Event probability"}
+                                {type === "Edit" ? "Update" : "Add "}
                             </Button>
                         </div>
                     )}
