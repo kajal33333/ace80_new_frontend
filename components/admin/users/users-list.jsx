@@ -186,14 +186,14 @@ const UserList = () => {
   const renderActions = (customer) => (
     <div className="flex gap-2">
       <Link
-        href={`/admin/view-customer?id=${customer.id}`}
+        href={`/admin/view-user?id=${customer.id}`}
         className="text-blue-600 hover:text-blue-800"
         title="Preview"
       >
         <Eye size={16} />
       </Link>
       <Link
-        href={`/admin/edit-customer?id=${customer.id}`}
+        href={`/admin/edit-user?id=${customer.id}`}
         className="text-yellow-600 hover:text-yellow-800"
         title="Edit"
       >

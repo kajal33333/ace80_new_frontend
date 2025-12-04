@@ -21,7 +21,7 @@ import { showSuccess } from "@/lib/toastUtils";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 
-const CropsList = () => {
+const RoleList = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialPage = Number(searchParams.get("page")) || 1;
@@ -171,14 +171,14 @@ const CropsList = () => {
   const renderActions = (crop) => (
     <div className="flex gap-2">
       <Link
-     href={`/admin/view-crops?id=${crop.role_id}`}
+     href={`/admin/view-role?id=${crop.role_id}`}
         className="text-blue-600 hover:text-blue-800"
         title="Preview"
       >
         <Eye size={16} />
       </Link>
       <Link
-      href={`/admin/edit-crops?id=${crop.role_id}`}
+      href={`/admin/edit-role?id=${crop.role_id}`}
 
         className="text-yellow-600 hover:text-yellow-800"
         title="Edit"
@@ -310,4 +310,4 @@ const CropsList = () => {
   );
 };
 
-export default CropsList;
+export default RoleList;
