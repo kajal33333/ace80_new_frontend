@@ -57,20 +57,20 @@ export function AppSidebar({ ...props }) {
       children: [
         { title: "Division", url: "/admin/division" },
         { title: "State", url: "/admin/state" },
-        { title: "models", url: "/admin/models" },
+        { title: "Models", url: "/admin/models" },
         { title: "Region", url: "/admin/region" },
-        { title: "category", url: "/admin/category" },
-        { title: "customer business", url: "/admin/customer-business" },
-        { title: "customer business type", url: "/admin/customer-business-type" },
-        { title: "order probability", url: "/admin/order-probability" },
-        { title: "competitor name", url: "/admin/competitor-name" },
+        { title: "Category", url: "/admin/category" },
+        { title: "Customer business", url: "/admin/customer-business" },
+        { title: "Customer business type", url: "/admin/customer-business-type" },
+        { title: "Order probability", url: "/admin/order-probability" },
+        { title: "Competitor name", url: "/admin/competitor-name" },
       ],
     },
     {
       title: "Leave/OD",
       icon: Package,
       children: [
-        { title: "status", url: "/admin/leave-status" },
+        { title: "Status", url: "/admin/leave-status" },
         { title: " Type", url: "/admin/leave-type" },
 
       ],
