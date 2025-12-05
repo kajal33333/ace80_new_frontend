@@ -302,7 +302,7 @@ const handleUpdate = async (e) => {
           </Button>
         </div>
 
-        {type !== "View" && (
+     {type === "Add" && (
   <div className="flex gap-2 mb-4">
     <Button
       variant={!showBulkUpload ? "default" : "outline-default"}
@@ -320,6 +320,7 @@ const handleUpdate = async (e) => {
     </Button>
   </div>
 )}
+
 {!showBulkUpload ? (
         <form onSubmit={type === "Edit" ? handleUpdate : handleSubmit}>
           <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">

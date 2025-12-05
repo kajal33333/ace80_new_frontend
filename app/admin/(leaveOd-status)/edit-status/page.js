@@ -1,16 +1,17 @@
-import {React, Suspense} from 'react'
+"use client";
+import AddLeaveOdStatus from "@/components/admin/master/leave-status/add-leaveOd-status";
 
+import { useSearchParams } from "next/navigation";
+import { Suspense } from 'react'
+const Page = () => {
+  const params = useSearchParams();
+  const id = params.get("id");
 
-import AddLeaveOdStatus from '@/components/admin/master/leave-status/add-leaveOd-status';
-const page = ({ searchParams }) => {
-    const id = searchParams?.id; 
   return (
-    <>
-      <Suspense fallback={<div className='flex justify-center items-center h-screen'>Loading...</div>}>
-        <AddLeaveOdStatus type="Edit" id={id} />
-      </Suspense>
-    </>
-  )
-}
+    <Suspense fallback={<div>Loading...</div>}>
+      <AddLeaveOdStatus type="Edit" userId={id} />
+    </Suspense>
+  );
+};
 
-export default page
+export default Page;

@@ -298,7 +298,7 @@ const AddUser = ({ type, userId }) => {
                 name="first_name"
                 value={formData.first_name}
                 onChange={handleChange}
-                disabled={type === "View"}
+              disabled={type === "View" || type !== "Edit"}
                 className="w-full border border-border rounded px-3 py-2 text-sm bg-background dark:text-gray-200"
                 placeholder="First name"
               />
@@ -320,7 +320,7 @@ const AddUser = ({ type, userId }) => {
                 name="last_name"
                 value={formData.last_name}
                 onChange={handleChange}
-                disabled={type === "View"}
+              disabled={type === "View" || type !== "Edit"}
                 className="w-full border border-border rounded px-3 py-2 text-sm bg-background dark:text-gray-200"
                 placeholder="Last name"
               />
@@ -342,7 +342,7 @@ const AddUser = ({ type, userId }) => {
                 name="primary_email"
                 value={formData.primary_email}
                 onChange={handleChange}
-                disabled={type === "View"}
+               disabled={type === "View" || type !== "Edit"}
                 className="w-full border border-border rounded px-3 py-2 text-sm bg-background dark:text-gray-200"
                 placeholder="Email"
               />
@@ -365,7 +365,7 @@ const AddUser = ({ type, userId }) => {
                 name="contact"
                 value={formData.contact}
                 onChange={handleChange}
-                disabled={type === "View"}
+             disabled={type === "View" || type !== "Edit"}
                 className="w-full border border-border rounded px-3 py-2 text-sm bg-background dark:text-gray-200"
                 placeholder="e.g., +1234567890"
               />
@@ -386,7 +386,7 @@ const AddUser = ({ type, userId }) => {
                 name="emp_code"
                 value={formData.emp_code}
                 onChange={handleChange}
-                disabled={type === "View"}
+               disabled={type === "View" || type !== "Edit"}
                 className="w-full border border-border rounded px-3 py-2 text-sm bg-background dark:text-gray-200"
                 placeholder="Emp Code"
               />
@@ -429,7 +429,7 @@ const AddUser = ({ type, userId }) => {
                 name="address"
                 value={formData.address}
                 onChange={handleChange}
-                disabled={type === "View"}
+              disabled={type === "View" || type !== "Edit"}
                 className="w-full border border-border rounded px-3 py-2 text-sm bg-background dark:text-gray-200"
                 placeholder="Address"
               />
@@ -453,7 +453,7 @@ const AddUser = ({ type, userId }) => {
                   formData.start_date ? formData.start_date.split("T")[0] : ""
                 }
                 onChange={handleChange}
-                disabled={type === "View"}
+               disabled={type === "View" || type !== "Edit"}
                 className="w-full border border-border rounded px-3 py-2 text-sm bg-background dark:text-gray-200"
                 placeholder="Start Date"
               />
@@ -476,7 +476,7 @@ const AddUser = ({ type, userId }) => {
                 name="isAdmin"
                 value={formData.isAdmin}
                 onChange={handleChange}
-                disabled={type === "View"}
+             disabled={type === "View" || type !== "Edit"}
                 className="w-full border border-border rounded px-3 py-2 text-sm bg-background dark:text-gray-200"
                 placeholder="Admin"
               />
@@ -500,7 +500,7 @@ const AddUser = ({ type, userId }) => {
                   formData.status_date ? formData.status_date.split("T")[0] : ""
                 }
                 onChange={handleChange}
-                disabled={type === "View"}
+              disabled={type === "View" || type !== "Edit"}
                 className="w-full border border-border rounded px-3 py-2 text-sm bg-background dark:text-gray-200"
                 placeholder="Status Date"
               />
@@ -524,7 +524,7 @@ const AddUser = ({ type, userId }) => {
                 name="company_name"
                 value={formData.company_name}
                 onChange={handleChange}
-                disabled={type === "View"}
+              disabled={type === "View" || type !== "Edit"}
                 className="w-full border border-border rounded px-3 py-2 text-sm bg-background dark:text-gray-200"
               >
                 <option value="">Select Company</option>
@@ -551,7 +551,7 @@ const AddUser = ({ type, userId }) => {
                 name="location"
                 value={formData.location}
                 onChange={handleChange}
-                disabled={type === "View"}
+               disabled={type === "View" || type !== "Edit"}
                 className="w-full border border-border rounded px-3 py-2 text-sm bg-background dark:text-gray-200"
                 placeholder="location"
               />
@@ -572,7 +572,7 @@ const AddUser = ({ type, userId }) => {
                 name="role_id"
                 value={formData.role_id}
                 onChange={handleChange}
-                disabled={type === "View"}
+              disabled={type === "View" || type !== "Edit"}
                 className="w-full border border-border rounded px-3 py-2 text-sm bg-background dark:text-gray-200"
               >
                 <option value="">Select Role</option>

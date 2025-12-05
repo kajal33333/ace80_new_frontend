@@ -235,7 +235,7 @@ const [businessTypeList, setBusinessTypeList] = useState([]);
 
         const response = await instance.post("/enquiry", payload);
         showSuccess("Enquiry created successfully");
-        router.push("/daily-report");
+        router.push("/admin/daily-report");
 
     } catch (error) {
         console.log(error);
@@ -258,50 +258,7 @@ const [businessTypeList, setBusinessTypeList] = useState([]);
     }
 };
 
-    // const handleUpdate = async (e) => {
-    //     e.preventDefault();
-    //     const validationErrors = validate();
-    //     if (Object.keys(validationErrors).length > 0) {
-    //         setErrors(validationErrors);
-    //         showError("Please fix the highlighted errors");
-    //         return;
-    //     }
-    //     setErrors({});
-    //     setIsSubmitting(true);
-
-    //     try {
-    //         // Prepare payload
-    //         const payload = { ...formData };
-
-    //         // Convert role_id to number if needed
-    //         if (payload.role_id) payload.role_id = Number(payload.role_id);
-
-    //         // Convert isAdmin to boolean
-    //         payload.isAdmin = !!payload.isAdmin;
-
-    //         // Send JSON to backend
-    //         const response = await instance.put(`/enquiry?id=${id}`, payload);
-
-    //         if (response?.status === 200) {
-    //             showSuccess(response?.data?.message || "User updated successfully");
-    //             router.push("/daily-report");
-    //         }
-    //     } catch (error) {
-    //         console.log(error);
-    //         const backendErrors = error?.response?.data?.error?.errors;
-    //         if (backendErrors && Array.isArray(backendErrors)) {
-    //             const newErrors = {};
-    //             backendErrors.forEach((err) => {
-    //                 newErrors[err.field] = err.message;
-    //             });
-    //             setErrors(newErrors);
-    //         } else {
-    //             showError(error?.response?.data?.message || "Update failed");
-    //         }
-    //     } finally {
-    //         setIsSubmitting(false);
-    //     }
-    // };
+  
 
 const handleUpdate = async (e) => {
     e.preventDefault();
@@ -317,7 +274,7 @@ const handleUpdate = async (e) => {
     setIsSubmitting(true);
 
     try {
-        // enquiry_status ko string se ID mein convert karna zaroori hai
+        
         const enquiryStatusMap = {
             "HOT": 1,
             "WARM": 2,
@@ -326,15 +283,15 @@ const handleUpdate = async (e) => {
             "WON": 5
         };
 
-        // Payload banate hain — tumhara favorite formData use kar rahe hain
+      
         const payload = {
             ...formData,
 
-            // YE SAB FIX KIYE HAIN — AB KABHI ERROR NAHI AAYEGA
+           
             enquiry_status: enquiryStatusMap[formData.enquiry_status] || 1,
             efc_status: formData.efc_status || "HOT",
 
-            // Saare dropdown fields number mein convert (kyunki DB mein number store hai)
+         
             division: formData.division ? Number(formData.division) : null,
             customer_category: formData.customer_category ? Number(formData.customer_category) : null,
             competitor_name: formData.competitor_name ? Number(formData.competitor_name) : null,
@@ -357,7 +314,7 @@ const handleUpdate = async (e) => {
         const response = await instance.put(`/enquiry?id=${id}`, payload);
 
         showSuccess(response?.data?.message || "Enquiry updated successfully!");
-        router.push("/daily-report");
+        router.push("/admin/daily-report");
 
     } catch (error) {
         console.error("Update failed:", error.response?.data);
@@ -540,7 +497,7 @@ const fetchAllDropdowns = async () => {
     </label>
     <input
         type="email"
-        name="email_id"  // <-- change here
+        name="email_id"  
       value={formData.email_id || ""}
         onChange={handleChange}
         disabled={type === "View"}

@@ -83,27 +83,34 @@ const DailyReportList = () => {
   };
 
   const fetchUsers = async () => {
-    try {
-      const res = await instance.get("/users");
-      setUsersList(res.data?.data || []);
-    } catch (err) {
-      console.error("Failed to fetch users", err);
-    }
-  };
+  try {
+    const res = await instance.get("/users");
+    const users = res.data?.data || [];
+    setUsersList(users);     
+    return users;            
+  } catch (err) {
+    console.error("Failed to fetch users", err);
+    setUsersList([]);        
+    return [];
+  }
+};
 
-  useEffect(() => {
+ useEffect(() => {
   if (isFilterOpen) {
-    fetchCities().then(cities => {
-      setCitiesList(cities.map(c => ({ value: c.id.toString(), label: c.name })));
-      if (selectedCity) {
-        const cityObj = cities.find(c => c.id.toString() === selectedCity);
-        setTempCity(cityObj || null);
+    
+    const loadFilters = async () => {
+      await fetchCities();   
+      await fetchUsers();
+
+     
+      if (selectedCity && citiesList.length > 0) {
+        const found = citiesList.find(c => c.value === selectedCity);
+        setTempCity(found || null);
       }
-    });
-    fetchUsers().then(users => {
-      setUsersList(users || []);
       setTempAssignedTo(selectedAssignedTo || "");
-    });
+    };
+
+    loadFilters();
   }
 }, [isFilterOpen]);
 
@@ -127,22 +134,21 @@ const DailyReportList = () => {
     closeModal();
   };
 
-  // Filter actions
-  // const handleApplyFilter = () => {
-  //   setSelectedCity(tempCity ? tempCity.value : "");
-  //   setSelectedAssignedTo(tempAssignedTo);
-  //   setCurrentPage(1);
-  //   setIsFilterOpen(false);
-  // };
+
 
   const handleApplyFilter = () => {
-  setSelectedCity(tempCity ? tempCity.value : "");
-  setSelectedAssignedTo(tempAssignedTo || "");
-  setCurrentPage(1);
-  setIsFilterOpen(false);
-};
+    setSelectedCity(tempCity ? tempCity.value : "");
+    setSelectedAssignedTo(tempAssignedTo || "");
+    setCurrentPage(1);
+    setIsFilterOpen(false);
+  };
 
-
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+      router.push(`?page=${page}&limit=${limit}`);
+    }
+  };
   const handleResetFilter = () => {
     setTempCity(null);
     setTempAssignedTo("");
@@ -215,7 +221,7 @@ const DailyReportList = () => {
           {permittedActions.Create && (
             <Link href="/admin/add-report">
               <Button variant="default" size="sm" className="gap-2">
-                <IconPlus size={16} /> Add 
+                <IconPlus size={16} /> Add
               </Button>
             </Link>
           )}
@@ -229,14 +235,18 @@ const DailyReportList = () => {
       <DataTable columns={columns} data={reports} renderActions={renderActions} currentPage={currentPage} limit={limit} />
 
       {/* Pagination */}
+
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
-        onPageChange={(page) => { setCurrentPage(page); fetchReports(); }}
-        onLimitChange={(newLimit) => { setLimit(newLimit); setCurrentPage(1); fetchReports(); }}
+        onPageChange={handlePageChange}
+        onLimitChange={(newLimit) => {
+          setLimit(newLimit);
+          setCurrentPage(1);
+          router.push(`?page=1&limit=${newLimit}`);
+        }}
         limit={limit}
       />
-
       {/* Delete Modal */}
       <ConfirmationModal
         isOpen={isModalOpen}
@@ -249,43 +259,51 @@ const DailyReportList = () => {
       />
 
       {/* Filter Modal */}
-      <ConfirmationModal
-        isOpen={isFilterOpen}
-        onClose={() => setIsFilterOpen(false)}
-        onConfirm={handleApplyFilter}
-        title="Filter Daily Reports"
-        description={
-          <div className="flex flex-col gap-4">
-            <div>
-              <label className="block text-sm font-medium">City</label>
-              <Select
-                options={citiesList}
-                value={tempCity}
-                onChange={setTempCity}
-                isClearable
-                placeholder="Select city..."
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium">Assigned To</label>
-              <select
-                className="w-full border rounded px-2 py-1 text-sm"
-                value={tempAssignedTo}
-                onChange={(e) => setTempAssignedTo(e.target.value)}
-              >
-                <option value="">All Users</option>
-                {usersList.map((u) => (
-                  <option key={u.id} value={u.id}>{`${u.first_name} ${u.last_name}`}</option>
-                ))}
-              </select>
-            </div>
-            <Button variant="outline" size="sm" onClick={handleResetFilter}>
-              Reset Filters
-            </Button>
-          </div>
-        }
-        confirmButtonText="Apply"
+     {/* Filter Modal */}
+<ConfirmationModal
+  isOpen={isFilterOpen}
+  onClose={() => setIsFilterOpen(false)}
+  onConfirm={handleApplyFilter}
+  title="Filter Daily Reports"
+  confirmButtonText="Apply Filter"
+  confirmButtonVariant="default"
+  cancelButtonText="Cancel"
+>
+  <div className="space-y-4">
+    <div>
+      <label className="block text-sm font-medium mb-1">City</label>
+      <Select
+        options={citiesList}
+        value={tempCity}
+        onChange={setTempCity}
+        isClearable
+        placeholder="Select city..."
+        className="react-select-container"
+        classNamePrefix="react-select"
       />
+    </div>
+
+    <div>
+      <label className="block text-sm font-medium mb-1">Assigned To</label>
+      <select
+        className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+        value={tempAssignedTo}
+        onChange={(e) => setTempAssignedTo(e.target.value)}
+      >
+        <option value="">All Users</option>
+        {usersList.map((u) => (
+          <option key={u.id} value={u.id}>
+            {u.first_name} {u.last_name}
+          </option>
+        ))}
+      </select>
+    </div>
+
+    <Button variant="outline" size="sm" className="w-full" onClick={handleResetFilter}>
+      Reset Filters
+    </Button>
+  </div>
+</ConfirmationModal>
     </div>
   );
 };

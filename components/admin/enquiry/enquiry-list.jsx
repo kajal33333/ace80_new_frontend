@@ -198,30 +198,30 @@ const EnquiryList = () => {
     }, {}) || {};
   }, [allowedActions]);
 
-  const renderActions = ({ row } = {}) => {
-    // fallback if row or row.original is missing
-    if (!row || !row.original) return null;
+  const renderActions = (row) => {
+  if (!row) return null;
+  const report = row.original || row;
+  return (
+    <div className="flex gap-3">
+      {permittedActions.View && (
+        <Link href={`/admin/view-enquiry?id=${report.id}`} className="text-blue-600 hover:text-blue-800">
+          <Eye size={16} />
+        </Link>
+      )}
+      {permittedActions.Edit && (
+        <Link href={`/admin/edit-enquiry?id=${report.id}`} className="text-yellow-600 hover:text-yellow-800">
+          <Edit size={16} />
+        </Link>
+      )}
+      {permittedActions.Delete && (
+        <button onClick={() => openDeleteModal(report.id)} className="text-red-500 hover:text-red-800">
+          <Trash size={16} />
+        </button>
+      )}
+    </div>
+  );
+};
 
-    return (
-      <div className="flex gap-3">
-        {permittedActions.View && (
-          <Link href={`/enquiry/view-enquiry?id=${row.original.id}`} className="text-blue-600 hover:text-blue-800">
-            <Eye size={16} />
-          </Link>
-        )}
-        {permittedActions.Edit && (
-          <Link href={`/enquiry/edit-enquiry?id=${row.original.id}`} className="text-yellow-600 hover:text-yellow-800">
-            <Edit size={16} />
-          </Link>
-        )}
-        {permittedActions.Delete && (
-          <button onClick={() => openDeleteModal(row.original.id)} className="text-red-500 hover:text-red-800">
-            <Trash size={16} />
-          </button>
-        )}
-      </div>
-    );
-  };
 
 
   const columns = useMemo(() => [

@@ -1,8 +1,11 @@
+// "use client";
 // import AddUser from '@/components/admin/users/add-user'
 // import React from 'react'
 // import { Suspense } from 'react'
 // const page = ({ searchParams }) => {
-//   const id = searchParams.id;
+//    const id = searchParams?.id; 
+
+   
 //   return (
 //     <>
 //       <Suspense fallback={<div className='flex justify-center items-center h-screen'>Loading...</div>}>
@@ -15,23 +18,19 @@
 // export default page
 
 
-// app/admin/view-user/page.jsx   (ya jahan bhi hai)
-
-import AddUser from '@/components/admin/users/add-user';
-import { Suspense } from 'react';
-
-const ViewUserPage = ({ searchParams }) => {
-  const id = searchParams?.id;   // ← yeh line bilkul sahi hai
-
-  if (!id || id === 'undefined') {
-    return <div className="p-12 text-center text-red-600 text-xl">Invalid User ID</div>;
-  }
+"use client";
+import AddUser from "@/components/admin/users/add-user";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from 'react'
+const Page = () => {
+  const params = useSearchParams();
+  const id = params.get("id");
 
   return (
-    <Suspense fallback={<div className="flex justify-center items-center h-screen">Loading...</div>}>
-      <AddUser type="View" userId={id} />   {/* ← userId prop pass karo */}
+    <Suspense fallback={<div>Loading...</div>}>
+      <AddUser type="View" userId={id} />
     </Suspense>
   );
 };
 
-export default ViewUserPage;
+export default Page;

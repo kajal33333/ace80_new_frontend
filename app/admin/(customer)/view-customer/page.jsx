@@ -1,6 +1,6 @@
 "use client";
-import AddLeaveOdStatus from "@/components/admin/master/leave-status/add-leaveOd-status";
 
+import AddCustomer from "@/components/admin/customers/add-customer";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from 'react'
 const Page = () => {
@@ -9,7 +9,7 @@ const Page = () => {
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <AddLeaveOdStatus type="View" userId={id} />
+      <AddCustomer type="View" userId={id} />
     </Suspense>
   );
 };

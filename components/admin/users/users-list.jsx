@@ -23,7 +23,7 @@ const UserList = () => {
   const initialLimit = Number(searchParams.get("limit")) || 10;
 
   const instance = axiosInstance();
-  const [customers, setCustomers] = useState([]);
+ 
   const [users, setUsers] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(initialPage);
@@ -93,7 +93,7 @@ const UserList = () => {
 
   const handleDelete = async () => {
     try {
-      const response = await instance.delete(`/customer?id=${selectedCustomer.id}`);
+      const response = await instance.delete(`/users/delete?id=${selectedCustomer.id}`);
       if (response?.status === 200) {
         showSuccess(response?.data?.message);
         fetchUsers();

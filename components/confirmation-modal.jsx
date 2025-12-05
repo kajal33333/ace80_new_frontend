@@ -3,7 +3,7 @@ import React from "react";
 import { X } from "lucide-react";
 import { Button } from "./ui/button";
 
-const ConfirmationModal = ({ isOpen, onClose, onConfirm, title = "Confirm Deletion", description = "Are you sure you want to delete this item? This action cannot be undone.", confirmButtonText = "Delete", confirmButtonVariant = "outline" }) => {
+const ConfirmationModal = ({ isOpen, onClose, onConfirm, title = "Confirm Deletion", children, description = "Are you sure you want to delete this item? This action cannot be undone.", confirmButtonText = "Delete", confirmButtonVariant = "outline", }) => {
   if (!isOpen) return null;
 
   return (
@@ -24,13 +24,19 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, title = "Confirm Deleti
           <X className="w-5 h-5" />
         </button>
 
-        {/* Modal Content */}
+
         <h2 id="delete-title" className="text-lg font-semibold text-green-900 dark:text-amber-200">
           {title}
         </h2>
-        <p id="delete-description" className="text-sm text-amber-900 dark:text-amber-300 mt-2">
-          {description}
-        </p>
+        {children ? (
+
+          <div className="mt-4">{children}</div>
+        ) : (
+
+          <p id="delete-description" className="text-sm text-amber-900 dark:text-amber-300 mt-2">
+            {description}
+          </p>
+        )}
 
         {/* Action Buttons */}
         <div className="mt-6 flex justify-end gap-2">
