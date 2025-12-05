@@ -28,15 +28,17 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, title = "Confirm Deleti
         <h2 id="delete-title" className="text-lg font-semibold text-green-900 dark:text-amber-200">
           {title}
         </h2>
-        {children ? (
+       {children ? (
+  <div className="mt-4">{children}</div>
+) : (
+  <div
+    id="delete-description"
+    className="text-sm text-amber-900 dark:text-amber-300 mt-2"
+  >
+    {description}
+  </div>
+)}
 
-          <div className="mt-4">{children}</div>
-        ) : (
-
-          <p id="delete-description" className="text-sm text-amber-900 dark:text-amber-300 mt-2">
-            {description}
-          </p>
-        )}
 
         {/* Action Buttons */}
         <div className="mt-6 flex justify-end gap-2">
