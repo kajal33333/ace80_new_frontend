@@ -15,6 +15,8 @@ import { showSuccess } from "@/lib/toastUtils";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
+import DisableUserModal from "./disablemodal-user";
+import EnableUserModal from "./enable-user-modal";
 
 const UserList = () => {
   const router = useRouter();
@@ -29,7 +31,10 @@ const UserList = () => {
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [limit, setLimit] = useState(initialLimit);
   const [searchText, setSearchText] = useState("");
-
+const [activeUsers, setActiveUsers] = useState([]);
+const [transferUserId, setTransferUserId] = useState(null);
+const [enableUserId, setEnableUserId] = useState(null);
+  const [enableUserModalOpen, setEnableUserModalOpen] = useState(false);
   const [modalType, setModalType] = useState(null); // 'delete' | 'toggle'
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -79,11 +84,33 @@ const UserList = () => {
     setIsModalOpen(true);
   };
 
-  const openToggleModal = (customer) => {
-    setSelectedCustomer(customer);
-    setModalType('toggle');
-    setIsModalOpen(true);
-  };
+const openToggleModal = async (customer) => {
+  setSelectedCustomer(customer);
+
+  if (customer.isActive) {
+    // DISABLE MODAL
+    setModalType("disable");
+
+    try {
+      const response = await instance.get("/users?getAll=true");
+      if (response?.status === 200) {
+        setActiveUsers(
+          response.data.data.filter((u) => u.isActive && u.id !== customer.id)
+        );
+      }
+    } catch (error) {
+      console.error("Error fetching active users:", error);
+    }
+  } else {
+    // ENABLE MODAL
+    setModalType("enable");
+  }
+
+  setIsModalOpen(true);
+};
+
+
+
 
   const closeModal = () => {
     setSelectedCustomer(null);
@@ -105,27 +132,52 @@ const UserList = () => {
   };
 
   const handleToggleStatus = async () => {
-    if (!selectedCustomer) return;
+  if (!selectedCustomer) return;
+
+  const needsTransfer =
+    selectedCustomer.dailyReportsCount > 0 ||
+    selectedCustomer.enquiriesCount > 0;
+
+  if (selectedCustomer.isActive) {
+    // DISABLING LOGIC
+    if (needsTransfer && !transferUserId) {
+      alert("Please select a user to transfer reports and enquiries.");
+      return;
+    }
 
     try {
-      const payload = selectedCustomer.isActive
-        ? { active_user_id: selectedCustomer.id }
-        : { id: selectedCustomer.id };
+      const response = await instance.put("/users/disableUser", {
+        active_user_id: selectedCustomer.id,
+        change_user_id: transferUserId || null,
+      });
 
-      const response = selectedCustomer.isActive
-        ? await instance.put(`/users/disableUser`, payload)
-        : await instance.put(`/users/enableUser`, payload);
-
-      if (response?.status === 200) {
-        showSuccess(response?.data?.message);
+      if (response?.data?.success) {
+        showSuccess(response.data.message);
         fetchUsers();
       }
     } catch (error) {
-      console.error("Toggle status error:", error);
+      console.error("Error disabling user:", error);
     }
+  } else {
+    // ENABLING LOGIC
+    try {
+      const response = await instance.put("/users/enableUser", {
+        id: selectedCustomer.id,
+      });
 
-    closeModal();
-  };
+      if (response?.data?.success) {
+        showSuccess(response.data.message);
+        fetchUsers();
+      }
+    } catch (error) {
+      console.error("Error enabling user:", error);
+    }
+  }
+
+  closeModal();
+};
+
+
 
 
   const handlePageChange = (page) => {
@@ -267,37 +319,34 @@ const UserList = () => {
           limit={limit}
         />
       </div>
+{modalType === "delete" && (
+  <ConfirmationModal 
+      isOpen={isModalOpen} 
+      onClose={closeModal}
+      onConfirm={handleDelete}
+      title="Delete User"
+      description="Are you sure you want to delete this user?"
+  />
+)}
 
-      {/* Modal */}
-      <ConfirmationModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        onConfirm={
-          modalType === 'delete' ? handleDelete :
-            modalType === 'toggle' ? handleToggleStatus :
-              undefined
-        }
-        title={
-          modalType === 'delete' ? 'Confirm Deletion' :
-            modalType === 'toggle' && selectedCustomer ? (selectedCustomer.isActive ? 'Disable Customer' : 'Enable Customer') :
-              ''
-        }
-        description={
-          modalType === 'delete' ? 'Are you sure you want to delete this customer? This action cannot be undone.' :
-            modalType === 'toggle' && selectedCustomer ? (
-              selectedCustomer.isActive
-                ? 'Are you sure you want to disable this customer? You can enable it again later.'
-                : 'Are you sure you want to enable this customer?'
-            ) :
-              ''
-        }
-        confirmButtonText={
-          modalType === 'delete' ? 'Delete' :
-            modalType === 'toggle' && selectedCustomer ? (selectedCustomer.isActive ? 'Disable' : 'Enable') :
-              ''
-        }
-        confirmButtonVariant={modalType === 'delete' ? 'outline' : 'outline'}
-      />
+    {modalType === "disable" && (
+  <DisableUserModal
+      isOpen={isModalOpen}
+      onClose={closeModal}
+      onConfirm={handleToggleStatus}
+      activeUsers={activeUsers}
+      user={selectedCustomer}
+      setChangeUserId={setTransferUserId}
+  />
+)}
+{modalType === "enable" && (
+  <EnableUserModal
+    isOpen={isModalOpen}
+    onClose={closeModal}
+    onConfirm={handleToggleStatus}
+   
+  />
+)}
     </div>
   );
 };
