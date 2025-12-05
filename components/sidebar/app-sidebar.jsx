@@ -128,24 +128,24 @@ export function AppSidebar({ ...props }) {
         return (
           <SidebarMenuItem key={`${item.title}-${index}`}>
             <Collapsible>
-              <CollapsibleTrigger className="flex items-center justify-between w-full p-2 hover:bg-gray-100 rounded cursor-pointer">
-                <div className="flex items-center gap-2">
-                  <Icon className="w-4 h-4" />
-                  {item.title}
-                </div>
-                <ChevronDown className="w-4 h-4" />
-              </CollapsibleTrigger>
+             <CollapsibleTrigger className="flex items-center justify-between w-full p-2 hover:bg-gray-100 rounded cursor-pointer  text-sm text-gray-700 font-medium">
+  <div className="flex items-center gap-2">
+    <Icon className="w-4 h-4" />
+    <span>{item.title}</span>      
+  </div>
+  <ChevronDown className="w-4 h-4" />
+</CollapsibleTrigger>
 
               <CollapsibleContent>
-                <div className="ml-6 mt-1 flex flex-col gap-1">
+                <div className="ml-6 mt-1 flex flex-col gap-1 ">
                   {item.children.map((sub, i) => (
                     <Link
-                      key={`${sub.title}-${i}`}
-                      href={sub.url}
-                      className="p-2 text-sm hover:bg-gray-100 rounded"
-                    >
-                      {sub.title}
-                    </Link>
+  key={`${sub.title}-${i}`}
+  href={sub.url}
+  className="flex items-center w-full p-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
+>
+  {sub.title}
+</Link>
                   ))}
                 </div>
               </CollapsibleContent>
