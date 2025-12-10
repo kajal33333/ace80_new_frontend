@@ -45,10 +45,10 @@ export function AppSidebar({ ...props }) {
 
   // Static navigation
   const baseNavItems = [
-    { title: "Dashboard", url: "/admin/dashboard", icon: LucideLayoutDashboard },
-    { title: "Users", url: "/admin/users-list", icon: LucideUser },
-    { title: "Roles", url: "/admin/roles", icon: Leaf },
-    { title: "Customers", url: "/admin/customers", icon: Package },
+    { title: "Dashboard", link: "/admin/dashboard", icon: LucideLayoutDashboard },
+    { title: "Users", link: "/admin/users-list", icon: LucideUser },
+    { title: "Roles", link: "/admin/roles", icon: Leaf },
+    { title: "Customers", link: "/admin/customers", icon: Package },
 
     // COLLAPSIBLE ENQUIRY DATA
     {
@@ -128,7 +128,7 @@ export function AppSidebar({ ...props }) {
         return (
           <SidebarMenuItem key={`${item.title}-${index}`}>
             <Collapsible>
-             <CollapsibleTrigger className="flex items-center justify-between w-full p-2 hover:bg-gray-100 rounded cursor-pointer  text-sm text-gray-700 font-medium">
+             <CollapsibleTrigger className="flex items-center justify-between w-full p-2 hover:bg-[#F77A04] rounded cursor-pointer  text-sm text-white font-medium">
   <div className="flex items-center gap-2">
     <Icon className="w-4 h-4" />
     <span>{item.title}</span>      
@@ -142,7 +142,7 @@ export function AppSidebar({ ...props }) {
                     <Link
   key={`${sub.title}-${i}`}
   href={sub.url}
-  className="flex items-center w-full p-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
+  className="flex items-center w-full p-2 text-sm rounded-md hover:bg-[#F77A04] hover:text-accent-foreground transition-colors"
 >
   {sub.title}
 </Link>
@@ -156,41 +156,56 @@ export function AppSidebar({ ...props }) {
 
       // NORMAL MENU ITEM
       return (
-        <SidebarMenuItem key={`${item.title}-${index}`}>
-          <SidebarMenuButton asChild>
-            <Link
-              href={item.url || item.link || "#"}
-              className="flex items-center gap-2 text-gray-700 hover:bg-gray-100 p-2 rounded text-sm font-medium"
-            >
-              <Icon className="w-4 h-4" />
-              <span>{item.menu_name || item.title}</span>
-            </Link>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
+       
+          <SidebarMenuItem key={`${item.title}-${index}`}>
+  <SidebarMenuButton
+    asChild
+    className="flex items-center w-full gap-2 p-2 text-white rounded-md bg-black hover:bg-[#F77A04] transition-colors"
+  >
+    <Link href={item.link || "#"} className="flex items-center w-full gap-2">
+      <Icon className="w-4 h-4" />
+      <span>{item.menu_name || item.title}</span>
+    </Link>
+  </SidebarMenuButton>
+</SidebarMenuItem>
+
+       
       );
     });
   };
 
   return (
-    <Sidebar collapsible="offcanvas" {...props}>
-      <SidebarHeader>
+    <Sidebar collapsible="offcanvas" {...props}  className="bg-black text-white">
+     <SidebarHeader className="bg-black text-white">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:!p-1.5">
-              <Link href="/admin/dashboard" className="flex items-center gap-2">
-                <LucideVegan color="green" className="!size-5" />
-                <span className="text-base font-semibold text-orange-600">Ace 80</span>
-              </Link>
+            <Link href="/admin/dashboard" className="flex items-center w-full">
+  <img 
+    src="/Ace80.png" 
+    alt="Ace 80 Logo"
+    className="
+      h-10 w-auto object-contain
+      mx-auto
+      md:ml-10
+      lg:ml-14
+    "
+  />
+</Link>
+
+
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
 
-      <SidebarContent>
+    <SidebarContent className="bg-black text-white">
+
         <SidebarMenu>{renderNavItems(navItems)}</SidebarMenu>
       </SidebarContent>
 
-      <SidebarFooter>
+     <SidebarFooter className="bg-black text-white">
+
         <NavUser />
       </SidebarFooter>
     </Sidebar>

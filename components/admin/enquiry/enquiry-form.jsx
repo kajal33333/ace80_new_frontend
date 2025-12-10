@@ -427,7 +427,7 @@ const fetchAllDropdowns = async () => {
                                 htmlFor="mobile_no"
                                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200"
                             >
-                                Contact
+                                Contact *
                             </label>
                             <input
                                 type="text"
@@ -449,7 +449,7 @@ const fetchAllDropdowns = async () => {
                                 htmlFor="contact_person"
                                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200"
                             >
-                                Contact person
+                                Contact person *
                             </label>
                             <input
                                 type="text"
@@ -542,7 +542,7 @@ const fetchAllDropdowns = async () => {
                                 htmlFor="longitude"
                                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200"
                             >
-                                Purpose usage
+                                Purpose usage *
                             </label>
                             <input
                                 type="text"
@@ -563,7 +563,7 @@ const fetchAllDropdowns = async () => {
                                 htmlFor="latitude"
                                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200"
                             >
-                                EFC Status
+                                EFC Status *
                             </label>
                             <input
                                 type="text"
@@ -584,7 +584,7 @@ const fetchAllDropdowns = async () => {
                                 htmlFor="enquiry_status"
                                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200"
                             >
-                                Enquiry Status
+                                Enquiry Status *
                             </label>
                             <input
                                 type="text"
@@ -631,7 +631,7 @@ const fetchAllDropdowns = async () => {
                                 htmlFor="time_of_visit"
                                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200"
                             >
-                                Time of Visit
+                                Time of Visit *
                             </label>
 
                             <input
@@ -678,7 +678,7 @@ const fetchAllDropdowns = async () => {
                                 htmlFor="assigned_to"
                                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200"
                             >
-                                Assigned user
+                                Assigned user *
                             </label>
                             <select
                                 id="assigned_to"
@@ -707,7 +707,7 @@ const fetchAllDropdowns = async () => {
                                 htmlFor="next_meeting_date"
                                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200"
                             >
-                                Next meeting  date
+                                Next meeting  date *
                             </label>
 
                             <input
@@ -732,7 +732,7 @@ const fetchAllDropdowns = async () => {
                                 htmlFor="expected_closing_date"
                                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200"
                             >
-                                Expected closing date
+                                Expected closing date *
                             </label>
 
                             <input
@@ -757,7 +757,7 @@ const fetchAllDropdowns = async () => {
                                 htmlFor="location_area"
                                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200"
                             >
-                                location
+                                location *
                             </label>
                             <input
                                 type="text"
@@ -778,7 +778,7 @@ const fetchAllDropdowns = async () => {
                                 htmlFor="city"
                                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200"
                             >
-                                City
+                                City *
                             </label>
                             <select
                                 id="city"
@@ -806,7 +806,7 @@ const fetchAllDropdowns = async () => {
                                 htmlFor="division"
                                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200"
                             >
-                                division
+                                division *
                             </label>
                             <select
                                 id="division"
@@ -835,7 +835,7 @@ const fetchAllDropdowns = async () => {
                                 htmlFor="customer_category"
                                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200"
                             >
-                              customer category
+                              customer category *
                             </label>
                             <select
                                 id="customer_category"
@@ -889,7 +889,7 @@ const fetchAllDropdowns = async () => {
                                 htmlFor="state"
                                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200"
                             >
-                              State
+                              State *
                             </label>
                             <select
                                 id="state"
@@ -915,7 +915,7 @@ const fetchAllDropdowns = async () => {
                                 htmlFor="region"
                                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200"
                             >
-                              Region
+                              Region *
                             </label>
                             <select
                                 id="region"

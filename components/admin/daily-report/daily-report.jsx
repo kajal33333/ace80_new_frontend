@@ -19,7 +19,7 @@ import axiosInstance from "@/lib/axiosInstance";
 import { showSuccess } from "@/lib/toastUtils";
 import { format } from "date-fns";
 
-const DailyReportList = () => {
+const   DailyReportList = () => {
   const router = useRouter();
   const [reports, setReports] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
