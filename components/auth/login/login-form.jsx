@@ -76,18 +76,18 @@ export function LoginForm({ className, ...props }) {
         <CardHeader>
           <CardTitle>Login to your account</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            Enter your user ID below to login to your account
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogin} >
             <div className="grid gap-6">
               <div className="grid gap-3">
-                <Label htmlFor="empCode">Emp code</Label>
+                <Label htmlFor="empCode">User Id</Label>
                 <Input
                   id="empCode"
                   type="text"
-                  placeholder="m@example.com"
+                  placeholder="Enter your user Id"
                   value={formData.emp_code}
                   onChange={(e) =>
                     setFormData({ ...formData, emp_code: e.target.value })
@@ -114,6 +114,7 @@ export function LoginForm({ className, ...props }) {
                     id="password"
                     type={showPassword ? "text" : "password"}
                     className="pr-10"
+                     placeholder="Enter your password"
                     value={formData.password}
                     onChange={(e) =>
                       setFormData({ ...formData, password: e.target.value })

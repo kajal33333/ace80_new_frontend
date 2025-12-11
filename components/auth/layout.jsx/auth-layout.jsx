@@ -7,7 +7,7 @@ export default function AuthLayout({ children }) {
     <div className="grid min-h-svh lg:grid-cols-[2.5fr_1.5fr]">
       <div className="bg-muted relative hidden lg:block">
         <Image
-          src="/agritech.webp"
+          src="/cranes.png"
           alt="Ace 80"
           fill
           className="absolute inset-0 h-full w-full object-cover"
@@ -18,12 +18,10 @@ export default function AuthLayout({ children }) {
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full max-w-xs">
             <div className="flex justify-center mb-6">
-              <Link href="/" className="flex items-center gap-2 font-medium">
-                <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
-                  <LucideVegan className="size-4" />
-                </div>
-                Ace 80
-              </Link>
+          <Link href="/" className="flex items-center gap-2 font-medium">
+  <Image src="/Ace80.png" alt="Ace Logo" width={120} height={120} />
+ 
+</Link>
             </div>
             {children}
           </div>
